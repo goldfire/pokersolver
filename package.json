@@ -1,0 +1,32 @@
+{
+  "name": "pokersolver",
+  "description": "Javascript poker hand solver.",
+  "homepage": "https://github.com/goldfire/pokersolver",
+  "keywords": [
+    "poker",
+    "poker-hand",
+    "holdem",
+    "poker-evaluator"
+  ],
+  "author": "James Simpson <james@goldfirestudios.com> (http://goldfirestudios.com)",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/goldfire/pokersolver.git"
+  },
+  "main": "pokersolver.js",
+  "version": "1.0.0",
+  "license": {
+    "type": "MIT",
+    "url": "https://raw.githubusercontent.com/goldfire/pokersolver/master/LICENSE.md"
+  },
+  "devDependencies": {
+    "mocha": "*",
+    "should": "*"
+  },
+  "scripts": {
+    "test": "mocha test/test.js"
+  },
+  "engines": [
+    "node >= 4.0.0"
+  ]
+}
