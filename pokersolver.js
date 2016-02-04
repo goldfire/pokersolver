@@ -12,7 +12,7 @@
   /**
    * Base Card class that defines a single card.
    */
-  var Card = class Card {
+  class Card {
     constructor(str) {
       this.value = str.substr(0, 1);
       this.suit = str.substr(1, 1).toLowerCase();
@@ -37,7 +37,7 @@
   /**
    * Base Hand class that handles comparissons of full hands.
    */
-  var Hand = class Hand {
+  class Hand {
     constructor(cards, rank, name) {
       this.cardPool = [];
       this.cards = [];
@@ -194,7 +194,7 @@
     return result;
   };
 
-  var StraightFlush = class StraightFlush extends Hand {
+  class StraightFlush extends Hand {
     constructor(cards) {
       super(cards, 8, 'Straight Flush');
     }
@@ -227,7 +227,7 @@
     }
   }
 
-  var FourOfAKind = class FourOfAKind extends Hand {
+  class FourOfAKind extends Hand {
     constructor(cards) {
       super(cards, 7, 'Four of a Kind');
     }
@@ -255,7 +255,7 @@
     }
   }
 
-  var FullHouse = class FullHouse extends Hand {
+  class FullHouse extends Hand {
     constructor(cards) {
       super(cards, 6, 'Full House');
     }
@@ -290,7 +290,7 @@
     }
   }
 
-  var Flush = class Flush extends Hand {
+  class Flush extends Hand {
     constructor(cards) {
       super(cards, 5, 'Flush');
     }
@@ -312,7 +312,7 @@
     }
   }
 
-  var Straight = class Straight extends Hand {
+  class Straight extends Hand {
     constructor(cards) {
       super(cards, 4, 'Straight');
     }
@@ -354,7 +354,7 @@
     }
   }
 
-  var ThreeOfAKind = class ThreeOfAKind extends Hand {
+  class ThreeOfAKind extends Hand {
     constructor(cards) {
       super(cards, 3, 'Three of a Kind');
     }
@@ -377,7 +377,7 @@
     }
   }
 
-  var TwoPair = class TwoPair extends Hand {
+  class TwoPair extends Hand {
     constructor(cards) {
       super(cards, 2, 'Two Pair');
     }
@@ -403,7 +403,7 @@
     }
   }
 
-  var OnePair = class OnePair extends Hand {
+  class OnePair extends Hand {
     constructor(cards) {
       super(cards, 1, 'Pair');
     }
@@ -426,7 +426,7 @@
     }
   }
 
-  var HighCard = class HighCard extends Hand {
+  class HighCard extends Hand {
     constructor(cards) {
       super(cards, 0, 'High Card');
     }
@@ -439,33 +439,27 @@
     }
   }
 
+  function exportToGlobal(global) {
+    global.Card = Card;
+    global.Hand = Hand;
+    global.StraightFlush = StraightFlush;
+    global.FourOfAKind = FourOfAKind;
+    global.FullHouse = FullHouse;
+    global.Flush = Flush;
+    global.Straight = Straight;
+    global.ThreeOfAKind = ThreeOfAKind;
+    global.TwoPair = TwoPair;
+    global.OnePair = OnePair;
+    global.HighCard = HighCard;
+  }
+
   // Export the classes for node.js use.
   if (typeof exports !== 'undefined') {
-    exports.Card = Card;
-    exports.Hand = Hand;
-    exports.StraightFlush = StraightFlush;
-    exports.FourOfAKind = FourOfAKind;
-    exports.FullHouse = FullHouse;
-    exports.Flush = Flush;
-    exports.Straight = Straight;
-    exports.ThreeOfAKind = ThreeOfAKind;
-    exports.TwoPair = TwoPair;
-    exports.OnePair = OnePair;
-    exports.HighCard = HighCard;
+    exportToGlobal(exports);
   }
 
   // Add the classes to the window for browser use.
   if (typeof window !== 'undefined') {
-    window.Card = Card;
-    window.Hand = Hand;
-    window.StraightFlush = StraightFlush;
-    window.FourOfAKind = FourOfAKind;
-    window.FullHouse = FullHouse;
-    window.Flush = Flush;
-    window.Straight = Straight;
-    window.ThreeOfAKind = ThreeOfAKind;
-    window.TwoPair = TwoPair;
-    window.OnePair = OnePair;
-    window.HighCard = HighCard;
+    exportToGlobal(window);
   }
 })();
