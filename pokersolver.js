@@ -22,17 +22,17 @@
     toString() {
       return this.value + this.suit;
     }
-  }
 
-  Card.sort = function(a, b) {
-    if (a.rank > b.rank) {
-      return -1;
-    } else if (a.rank < b.rank) {
-      return 1;
-    } else {
-      return 0;
+    static sort(a, b) {
+      if (a.rank > b.rank) {
+        return -1;
+      } else if (a.rank < b.rank) {
+        return 1;
+      } else {
+        return 0;
+      }
     }
-  };
+  }
 
   /**
    * Base Hand class that handles comparissons of full hands.
@@ -143,56 +143,54 @@
       return cards;
     }
 
-    solve() {}
-  }
+    /**
+     * Find highest ranked hands and remove any that lose to another hand.
+     * @param  {Array} hands Hands to evaluate.
+     * @return {Array}       Winning hands.
+     */
+    static winners(hands) {
+      var highestRank = Math.max.apply(Math, hands.map(function(h) {
+        return h.rank;
+      }));
 
-  /**
-   * Find highest ranked hands and remove any that lose to another hand.
-   * @param  {Array} hands Hands to evaluate.
-   * @return {Array}       Winning hands.
-   */
-  Hand.winners = function(hands) {
-    var highestRank = Math.max.apply(Math, hands.map(function(h) {
-      return h.rank;
-    }));
+      hands = hands.filter(function(h) {
+        return h.rank === highestRank;
+      });
 
-    hands = hands.filter(function(h) {
-      return h.rank === highestRank;
-    });
+      hands = hands.filter(function(h) {
+        var lose = false;
+        for (var i=0; i<hands.length; i++) {
+          lose = h.loseTo(hands[i]);
+          if (lose) {
+            break;
+          }
+        }
 
-    hands = hands.filter(function(h) {
-      var lose = false;
+        return !lose;
+      });
+
+      return hands;
+    }
+
+    /**
+     * Build and return the best hand.
+     * @param  {Array} cards Array of cards (['Ad', '3c', 'Th', ...]).
+     * @return {Hand}       Best hand.
+     */
+    static solve(cards) {
+      var hands = [StraightFlush, FourOfAKind, FullHouse, Flush, Straight, ThreeOfAKind, TwoPair, OnePair, HighCard];
+      var result = null;
+
       for (var i=0; i<hands.length; i++) {
-        lose = h.loseTo(hands[i]);
-        if (lose) {
+        result = new hands[i](cards);
+        if (result.isPossible) {
           break;
         }
       }
 
-      return !lose;
-    });
-
-    return hands;
-  };
-
-  /**
-   * Build and return the best hand.
-   * @param  {Array} cards Array of cards (['Ad', '3c', 'Th', ...]).
-   * @return {Hand}       Best hand.
-   */
-  Hand.solve = function(cards) {
-    var hands = [StraightFlush, FourOfAKind, FullHouse, Flush, Straight, ThreeOfAKind, TwoPair, OnePair, HighCard];
-    var result = null;
-
-    for (var i=0; i<hands.length; i++) {
-      result = new hands[i](cards);
-      if (result.isPossible) {
-        break;
-      }
+      return result;
     }
-
-    return result;
-  };
+  }
 
   class StraightFlush extends Hand {
     constructor(cards) {
