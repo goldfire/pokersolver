@@ -1,6 +1,6 @@
 /**
  * pokersolver
- * Copyright (c) 2016, GoldFire Studios, Inc.
+ * Copyright (c) 2016, James Simpson of GoldFire Studios
  * http://goldfirestudios.com
  */
 
