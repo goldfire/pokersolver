@@ -82,10 +82,10 @@
 
       var result = 0;
       for (var i=0; i<=4; i++) {
-        if (this.cards[i].rank < a.cards[i].rank) {
+        if (this.cards[i] && a.cards[i] && this.cards[i].rank < a.cards[i].rank) {
           result = 1;
           break;
-        } else if (this.cards[i].rank > a.cards[i].rank) {
+        } else if (this.cards[i] && a.cards[i] && this.cards[i].rank > a.cards[i].rank) {
           result = -1;
           break;
         }
@@ -180,6 +180,7 @@
     static solve(cards) {
       var hands = [StraightFlush, FourOfAKind, FullHouse, Flush, Straight, ThreeOfAKind, TwoPair, OnePair, HighCard];
       var result = null;
+      cards = cards || [''];
 
       for (var i=0; i<hands.length; i++) {
         result = new hands[i](cards);
