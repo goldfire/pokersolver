@@ -1488,7 +1488,7 @@
      * @return {Array} [hiCards, loCards] High and Low components, if any.
      */
     getSFData(cards) {
-      var hiCards, possibleLoCards, bestLoCards, bestLoCardsCheck, bestHand;
+      var hiCards, possibleLoCards, bestLoCards, bestHand;
       var handsToCheck = [
         new StraightFlush(cards, new Game('paigowpokersf7')),
         new StraightFlush(cards, new Game('paigowpokersf6')),
@@ -1519,8 +1519,7 @@
           }
           if (possibleLoCards) {
             possibleLoCards = possibleLoCards.sort(Card.sort);
-            bestLoCardsCheck = (bestLoCards.length > 1 && bestLoCards[0].rank === possibleLoCards[0].rank && bestLoCards[1].rank < possibleLoCards[1].rank);
-            if (!bestLoCards || bestLoCards[0].rank < possibleLoCards[0].rank || bestLoCardsCheck) {
+            if (!bestLoCards || bestLoCards[0].rank < possibleLoCards[0].rank || (bestLoCards.length > 1 && bestLoCards[0].rank === possibleLoCards[0].rank && bestLoCards[1].rank < possibleLoCards[1].rank)) {
               bestLoCards = possibleLoCards;
               bestHand = hand;
             }
@@ -1631,7 +1630,10 @@
      * @return {PaiGowPokerHelper} Object with split hands.
      */
     static solve(fullHand) {
-      return new PaiGowPokerHelper(fullHand || ['']).splitHouseWay();
+      var result = new PaiGowPokerHelper(fullHand = fullHand || ['']);
+      result.splitHouseWay();
+
+      return result;
     }
   }
 
