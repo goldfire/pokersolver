@@ -9,8 +9,6 @@
 
   // NOTE: The 'joker' will be denoted with a value of 'O' and any suit.
   var values = ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A'];
-  var wildStatuses = ['an ace, unless used to complete a straight and/or flush', 'any card'];
-  var wheelStatuses = ['lowest straight', 'second highest straight']
 
   /**
    * Base Card class that defines a single card.
@@ -59,10 +57,10 @@
         this.alwaysQualifies = false;
       }
       
-      // Get rank based on game
-      var handRank = game.handValues.length;
+      // Get rank based on game.
+      var handRank = this.game.handValues.length;
       for (var i=0; i<this.game.handValues.length; i++) {
-        if (game.handValues[i] === this.constructor) {
+        if (this.game.handValues[i] === this.constructor) {
           break;
         }
       }
@@ -73,7 +71,7 @@
         return (typeof c === 'string') ? new Card(c) : c;
       });
 
-      // Fix the card ranks for wild cards, and sort
+      // Fix the card ranks for wild cards, and sort.
       for (var i=0; i<this.cardPool.length; i++) {
         card = this.cardPool[i];
         if (card.value === this.game.wildValue) {
@@ -82,19 +80,20 @@
       }
       this.cardPool = this.cardPool.sort(Card.sort);
 
-      // create the arrays of suits and values
+      // Create the arrays of suits and values.
       var obj, obj1, key, key1, card;
       for (var i=0; i<this.cardPool.length; i++) {
-        // make sure this value already exists in the object
+        // Make sure this value already exists in the object.
         card = this.cardPool[i];
-        // We do something special if this is a wild card
+
+        // We do something special if this is a wild card.
         if (card.rank === -1) {
           this.wilds.push(card);
         } else {
           (obj = this.suits)[key = card.suit] || (obj[key] = []);
           (obj1 = this.values)[key1 = card.rank] || (obj1[key1] = []);
 
-          // add the value to the array for that type in the object
+          // Add the value to the array for that type in the object.
           this.suits[card.suit].push(card);
           this.values[card.rank].push(card);
         }
@@ -141,15 +140,13 @@
 
     /**
      * Determine the number of cards in a hand of a rank.
-     * @param  {int} val Index of this.values.
-     * @return {int} Number of cards having the rank, including wild cards.
+     * @param  {Number} val Index of this.values.
+     * @return {Number} Number of cards having the rank, including wild cards.
      */
     getNumCardsByRank(val) {
       var cards = this.values[val];
-      var checkCardsLength = 0;
-      if (cards) {
-        checkCardsLength = cards.length;
-      }
+      var checkCardsLength = (cards) ? cards.length : 0;
+
       for (var i=0; i<this.wilds.length; i++) {
         if (this.wilds[i].rank > -1) {
           continue;
@@ -161,6 +158,7 @@
           checkCardsLength += 1;
         }
       }
+
       return checkCardsLength;
     }
 
@@ -171,11 +169,12 @@
      * @return {Array} Cards having the suit, including wild cards.
      */
     getCardsForFlush(suit, setRanks) {
-      var cards = this.suits[suit] || [];
-      cards = cards.sort(Card.sort);
+      var cards = (this.suits[suit] || []).sort(Card.sort);
+
       for (var i=0; i<this.wilds.length; i++) {
         var wild = this.wilds[i];
         wild.suit = suit;
+
         if (setRanks) {
           var j=0;
           while (j<values.length && j<cards.length) {
@@ -188,9 +187,11 @@
           wild.rank = values.length-1-j;
           wild.wildValue = values[wild.rank];
         }
+
         cards.push(wild);
         cards = cards.sort(Card.sort);
       }
+
       return cards;
     }
 
@@ -219,7 +220,7 @@
         }
       });
 
-      // Account for remaining wild card when it must be ace
+      // Account for remaining wild card when it must be ace.
       if (this.game.wildStatus === 0) {
         for (var i=0; i<picks.length; i++) {
           var card = picks[i];
@@ -230,6 +231,7 @@
         }
         picks = picks.sort(Card.sort);
       }
+
       return picks;
     }
 
@@ -265,9 +267,8 @@
       if (!this.game.lowestQualified || this.alwaysQualifies) {
         return true;
       }
-      var lowHand = Hand.solve(this.game.lowestQualified, this.game)
-      return (this.compare(lowHand) <= 0);
 
+      return (this.compare(Hand.solve(this.game.lowestQualified, this.game)) <= 0);
     }
 
     /**
@@ -306,14 +307,17 @@
     /**
      * Build and return the best hand.
      * @param  {Array} cards Array of cards (['Ad', '3c', 'Th', ...]).
-     * @param  {Game} game Game being played.
+     * @param  {String} game Game being played.
      * @param  {Boolean} canDisqualify Check for a qualified hand.
      * @return {Hand}       Best hand.
      */
     static solve(cards, game, canDisqualify) {
+      game = game || 'standard';
+      game = (typeof game === 'string') ? new Game(game) : game;
+      cards = cards || [''];
+
       var hands = game.handValues;
       var result = null;
-      cards = cards || [''];
 
       for (var i=0; i<hands.length; i++) {
         result = new hands[i](cards, game, canDisqualify);
@@ -333,10 +337,10 @@
      */
     static stripWilds(cards, game) {
       var card, wilds, nonWilds;
-
       cards = cards || [''];
       wilds = [];
       nonWilds = [];
+
       for (var i=0; i<cards.length; i++) {
         card = cards[i];
         if (card.rank === -1) {
@@ -345,6 +349,7 @@
           nonWilds.push(cards[i]);  
         }
       }
+
       return [wilds, nonWilds];
     }
   }
@@ -423,7 +428,7 @@
           }
         }
         if (i === this.game.sfQualify) {
-          this.descr = 'Natural Royal Flush';
+          this.descr = 'Royal Flush';
         }
       }
       return result;
@@ -448,7 +453,7 @@
         }
         if (i === this.game.sfQualify) {
           result = false;
-          this.descr = 'Natural Royal Flush';
+          this.descr = 'Royal Flush';
         }
       }
       return result;
@@ -462,6 +467,7 @@
 
     solve() {
       this.resetWildCards();
+
       for (var i=0; i<this.values.length; i++) {
         if (this.getNumCardsByRank(i) === 5) {
           this.cards = this.values[i] || [];
@@ -479,6 +485,7 @@
           break;
         }
       }
+
       if (this.cards.length >= 5) {
         this.descr = this.name + ', ' + this.cards[0].wildValue + '\'s';
       }
@@ -494,8 +501,8 @@
 
     solve() {
       var cards;
-
       this.resetWildCards();
+
       for (var i=0; i<this.values.length; i++) {
         if (this.getNumCardsByRank(i) === 4) {
           this.cards = this.values[i] || [];
@@ -558,6 +565,7 @@
 
     solve() {
       this.resetWildCards();
+
       for (var i=0; i<this.values.length; i++) {
         if (this.getNumCardsByRank(i) === 4) {
           this.cards = this.values[i] || [];
@@ -611,8 +619,8 @@
 
     solve() {
       var cards;
-
       this.resetWildCards();
+
       for (var i=0; i<this.values.length; i++) {
         if (this.getNumCardsByRank(i) === 3) {
           this.cards = this.values[i] || [];
@@ -692,8 +700,8 @@
 
     solve() {
       var cards;
-
       this.resetWildCards();
+
       for (var i=0; i<this.values.length; i++) {
         if (this.getNumCardsByRank(i) === 3) {
           this.cards = this.values[i] || [];
@@ -757,6 +765,7 @@
     solve() {
       this.sfLength = 0;
       this.resetWildCards();
+
       for (var suit in this.suits) {
         var cards = this.getCardsForFlush(suit, true);
         if (cards.length >= this.game.sfQualify) {
@@ -1039,6 +1048,7 @@
 
     solve() {
       this.resetWildCards();
+
       for (var i=0; i<this.values.length; i++) {
         if (this.getNumCardsByRank(i) === 3) {
           this.cards = this.values[i] || [];
@@ -1072,6 +1082,7 @@
 
     solve() {
       this.resetWildCards();
+
       for (var i=0; i<this.values.length; i++) {
         var cards = this.values[i];
         if (this.cards.length > 2 && this.getNumCardsByRank(i) === 2) {
@@ -1146,6 +1157,7 @@
 
     solve() {
       this.resetWildCards();
+
       for (var i=0; i<this.values.length; i++) {
         var cards = this.values[i];
         if (this.cards.length > 0 && this.getNumCardsByRank(i) === 2) {
@@ -1203,6 +1215,7 @@
 
     solve() {
       this.resetWildCards();
+
       for (var i=0; i<this.values.length; i++) {
         if (this.getNumCardsByRank(i) === 2) {
           this.cards = this.cards.concat(this.values[i] || []);
@@ -1236,6 +1249,7 @@
 
     solve() {
       this.cards = this.cardPool.slice(0, this.game.cardsInHand);
+
       for (var i=0; i<this.cards.length; i++) {
         var card = this.cards[i];
         if (this.cards[i].value === this.game.wildValue) {
@@ -1243,6 +1257,7 @@
           this.cards[i].rank = values.indexOf('A');
         }
       }
+
       this.cards = this.cards.sort(Card.sort);
       this.descr = this.cards[0].wildValue + ' High';
 
@@ -1274,6 +1289,7 @@
       } else {
         this.baseHand = hand;
       }
+
       this.game = this.baseHand.game;
     }
 
@@ -1283,7 +1299,9 @@
     splitHouseWay() {
       var hiCards, loCards;
       var rank = this.game.handValues.length - this.baseHand.rank;
-      if (this.game.handValues[rank] === FiveOfAKind) {
+      var handValue = this.game.handValues[rank];
+
+      if (handValue === FiveOfAKind) {
         if (this.baseHand.cards[5].value === 'K' && this.baseHand.cards[6].value === 'K') {
           loCards = this.baseHand.cards.slice(5, 7);
           hiCards = this.baseHand.cards.slice(0, 5);
@@ -1291,7 +1309,7 @@
           loCards = this.baseHand.cards.slice(0, 2);
           hiCards = this.baseHand.cards.slice(2, 7);
         }
-      } else if (this.game.handValues[rank] === FourOfAKindPairPlus) {
+      } else if (handValue === FourOfAKindPairPlus) {
         if (this.baseHand.cards[0].wildValue === 'A' && this.baseHand.cards[4].value !== 'K') {
           hiCards = this.baseHand.cards.slice(0, 2);
           loCards = this.baseHand.cards.slice(2, 4);
@@ -1301,9 +1319,7 @@
           loCards = this.baseHand.cards.slice(4, 6);
           hiCards.push(this.baseHand.cards[6]);
         }
-      } else if (this.game.handValues[rank] === StraightFlush ||
-                 this.game.handValues[rank] === Flush ||
-                 this.game.handValues[rank] === Straight) {
+      } else if (handValue === StraightFlush || handValue === Flush || handValue === Straight) {
         var sfReturn;
         var altGame = new Game('paigowpokeralt');
         var altHand = Hand.solve(this.baseHand.cards, altGame);
@@ -1344,9 +1360,7 @@
               loCards = altHand.cards.slice(2, 4);
               hiCards = hiCards.concat(altHand.cards.slice(4, 7));
             }
-          } else if (altHand.cards[0].wildValue !== 'A' &&
-                     altHand.cards[2].rank < 6 &&
-                     altHand.cards[4].wildValue === 'A') {
+          } else if (altHand.cards[0].wildValue !== 'A' && altHand.cards[2].rank < 6 && altHand.cards[4].wildValue === 'A') {
             hiCards = altHand.cards.slice(0, 4);
             loCards = altHand.cards.slice(4, 6);
             hiCards.push(altHand.cards[6]);
@@ -1356,9 +1370,7 @@
             hiCards = hiCards.concat(altHand.cards.slice(4, 7));
           }
         } else if (altGame.handValues[altRank] === OnePair) {
-          if (altHand.cards[0].rank >= values.indexOf('T') &&
-              altHand.cards[0].rank <= values.indexOf('K') &&
-              altHand.cards[2].wildValue === 'A') {
+          if (altHand.cards[0].rank >= values.indexOf('T') && altHand.cards[0].rank <= values.indexOf('K') && altHand.cards[2].wildValue === 'A') {
             var possibleSF = altHand.cards.slice(0, 2);
             possibleSF = possibleSF.concat(altHand.cards.slice(3, 7));
             sfReturn = this.getSFData(possibleSF);
@@ -1387,7 +1399,7 @@
           hiCards = sfReturn[0];
           loCards = sfReturn[1];
         }
-      } else if (this.game.handValues[rank] === FourOfAKind) {
+      } else if (handValue === FourOfAKind) {
         if (this.baseHand.cards[0].rank < 6) {
           hiCards = this.baseHand.cards.slice(0, 4);
           loCards = this.baseHand.cards.slice(4, 6);
@@ -1401,19 +1413,17 @@
           loCards = this.baseHand.cards.slice(2, 4);
           hiCards = hiCards.concat(this.baseHand.cards.slice(4, 7));
         }
-      } else if (this.game.handValues[rank] === TwoThreeOfAKind) {
+      } else if (handValue === TwoThreeOfAKind) {
         loCards = this.baseHand.cards.slice(0, 2);
         hiCards = this.baseHand.cards.slice(3, 6);
         hiCards.push(this.baseHand.cards[2]);
         hiCards.push(this.baseHand.cards[6]);
-      } else if (this.game.handValues[rank] === ThreeOfAKindTwoPair) {
+      } else if (handValue === ThreeOfAKindTwoPair) {
         hiCards = this.baseHand.cards.slice(0, 3);
         loCards = this.baseHand.cards.slice(3, 5);
         hiCards = hiCards.concat(this.baseHand.cards.slice(5, 7));
-      } else if (this.game.handValues[rank] === FullHouse) {
-        if (this.baseHand.cards[3].wildValue === '2' &&
-            this.baseHand.cards[5].wildValue === 'A' &&
-            this.baseHand.cards[6].wildValue === 'K') {
+      } else if (handValue === FullHouse) {
+        if (this.baseHand.cards[3].wildValue === '2' && this.baseHand.cards[5].wildValue === 'A' && this.baseHand.cards[6].wildValue === 'K') {
           hiCards = this.baseHand.cards.slice(0, 5);
           loCards = this.baseHand.cards.slice(5, 7);
         } else {
@@ -1421,7 +1431,7 @@
           loCards = this.baseHand.cards.slice(3, 5);
           hiCards = hiCards.concat(this.baseHand.cards.slice(5, 7));
         }
-      } else if (this.game.handValues[rank] === ThreeOfAKind) {
+      } else if (handValue === ThreeOfAKind) {
         if (this.baseHand.cards[0].wildValue === 'A') {
           hiCards = this.baseHand.cards.slice(0, 2);
           loCards = this.baseHand.cards.slice(2, 4);
@@ -1431,10 +1441,10 @@
           loCards = this.baseHand.cards.slice(3, 5);
           hiCards = hiCards.concat(this.baseHand.cards.slice(5, 7));
         }
-      } else if (this.game.handValues[rank] === ThreePair) {
+      } else if (handValue === ThreePair) {
         loCards = this.baseHand.cards.slice(0, 2);
         hiCards = this.baseHand.cards.slice(2, 7);
-      } else if (this.game.handValues[rank] === TwoPair) {
+      } else if (handValue === TwoPair) {
         if (this.baseHand.cards[0].rank < 6) {
           hiCards = this.baseHand.cards.slice(0, 4);
           loCards = this.baseHand.cards.slice(4, 6);
@@ -1449,9 +1459,7 @@
             loCards = this.baseHand.cards.slice(2, 4);
             hiCards = hiCards.concat(this.baseHand.cards.slice(4, 7));
           }
-        } else if (this.baseHand.cards[0].wildValue !== 'A' &&
-                   this.baseHand.cards[2].rank < 6 &&
-                   this.baseHand.cards[4].wildValue === 'A') {
+        } else if (this.baseHand.cards[0].wildValue !== 'A' && this.baseHand.cards[2].rank < 6 && this.baseHand.cards[4].wildValue === 'A') {
           hiCards = this.baseHand.cards.slice(0, 4);
           loCards = this.baseHand.cards.slice(4, 6);
           hiCards.push(this.baseHand.cards[6]);
@@ -1460,7 +1468,7 @@
           loCards = this.baseHand.cards.slice(2, 4);
           hiCards = hiCards.concat(this.baseHand.cards.slice(4, 7));
         }
-      } else if (this.game.handValues[rank] === OnePair) {
+      } else if (handValue === OnePair) {
         hiCards = this.baseHand.cards.slice(0, 2);
         loCards = this.baseHand.cards.slice(2, 4);
         hiCards = hiCards.concat(this.baseHand.cards.slice(4, 7));
@@ -1480,16 +1488,19 @@
      * @return {Array} [hiCards, loCards] High and Low components, if any.
      */
     getSFData(cards) {
-      var hiCards, possibleLoCards,bestLoCards, bestHand;
-      var handsToCheck = [new StraightFlush(cards, new Game('paigowpokersf7')),
-                          new StraightFlush(cards, new Game('paigowpokersf6')),
-                          new StraightFlush(cards, this.game),
-                          new Flush(cards, new Game('paigowpokersf7')),
-                          new Flush(cards, new Game('paigowpokersf6')),
-                          new Flush(cards, this.game),
-                          new Straight(cards, new Game('paigowpokersf7')),
-                          new Straight(cards, new Game('paigowpokersf6')),
-                          new Straight(cards, this.game)];
+      var hiCards, possibleLoCards, bestLoCards, bestLoCardsCheck, bestHand;
+      var handsToCheck = [
+        new StraightFlush(cards, new Game('paigowpokersf7')),
+        new StraightFlush(cards, new Game('paigowpokersf6')),
+        new StraightFlush(cards, this.game),
+        new Flush(cards, new Game('paigowpokersf7')),
+        new Flush(cards, new Game('paigowpokersf6')),
+        new Flush(cards, this.game),
+        new Straight(cards, new Game('paigowpokersf7')),
+        new Straight(cards, new Game('paigowpokersf6')),
+        new Straight(cards, this.game)
+      ];
+
       for (var i=0; i<handsToCheck.length; i++) {
         var hand = handsToCheck[i];
         if (hand.isPossible) {
@@ -1508,10 +1519,8 @@
           }
           if (possibleLoCards) {
             possibleLoCards = possibleLoCards.sort(Card.sort);
-            if (!bestLoCards || bestLoCards[0].rank < possibleLoCards[0].rank ||
-                (bestLoCards.length > 1 &&
-                 bestLoCards[0].rank === possibleLoCards[0].rank &&
-                 bestLoCards[1].rank < possibleLoCards[1].rank)) {
+            bestLoCardsCheck = (bestLoCards.length > 1 && bestLoCards[0].rank === possibleLoCards[0].rank && bestLoCards[1].rank < possibleLoCards[1].rank);
+            if (!bestLoCards || bestLoCards[0].rank < possibleLoCards[0].rank || bestLoCardsCheck) {
               bestLoCards = possibleLoCards;
               bestHand = hand;
             }
@@ -1521,6 +1530,7 @@
           }
         }
       }
+
       if (bestHand) {
         if (bestHand.sfLength === 7) {
           hiCards = bestHand.cards.slice(2, 7);
@@ -1540,6 +1550,7 @@
      */
     qualifiesValid() {
       var compareHands = Hand.winners([this.hiHand, this.loHand]);
+
       return !(compareHands.length === 1 && compareHands[0] === this.loHand);
     }
 
@@ -1559,6 +1570,7 @@
         // However, we'll still have it as a sanity check, just in case.
         return 0;
       }
+
       if (!banker.qualifiesValid()) {
         return 1;
       }
@@ -1575,10 +1587,12 @@
         // Player wins hi, Banker wins lo; push
         return 0;
       }
+
       if (loWinner.length === 1 && loWinner[0] === player.loHand) {
         // Banker wins hi, Player wins lo; push
         return 0;
       }
+
       // Banker wins both; banker wins
       return -1;
     }
@@ -1593,6 +1607,7 @@
      */
     static setHands(hiHand, loHand) {
       var fullHand = [];
+
       if (Array.isArray(hiHand)) {
         hiHand = Hand.solve(hiHand, new Game('paigowpokerhi'));
       }
@@ -1601,6 +1616,7 @@
         loHand = Hand.solve(loHand, new Game('paigowpokerlo'));
       }
       fullHand = fullHand.concat(loHand.cardPool);
+
       var result = new PaiGowPokerHelper(fullHand);
       result.hiHand = hiHand;
       result.loHand = loHand;
@@ -1615,119 +1631,130 @@
      * @return {PaiGowPokerHelper} Object with split hands.
      */
     static solve(fullHand) {
-      fullHand = fullHand || [''];
-      var result = new PaiGowPokerHelper(fullHand);
-      result.splitHouseWay();
-
-      return result;
+      return new PaiGowPokerHelper(fullHand || ['']).splitHouseWay();
     }
   }
 
-  var gameRules = {'standard': {'cardsInHand': 5,
-                                'handValues': [StraightFlush, FourOfAKind, FullHouse, Flush, Straight, ThreeOfAKind, TwoPair, OnePair, HighCard],
-                                'wildValue': null,
-                                'wildStatus': 1,
-                                'wheelStatus': 0,
-                                'sfQualify': 5,
-                                'lowestQualified': null
-                               },
-                   'jacksbetter': {'cardsInHand': 5,
-                                   'handValues': [StraightFlush, FourOfAKind, FullHouse, Flush, Straight, ThreeOfAKind, TwoPair, OnePair, HighCard],
-                                   'wildValue': null,
-                                   'wildStatus': 1,
-                                   'wheelStatus': 0,
-                                   'sfQualify': 5,
-                                   'lowestQualified': ['Jc', 'Jd', '4h', '3s', '2c']
-                                  },
-                   'joker': {'cardsInHand': 5,
-                             'handValues': [RoyalFlush, FiveOfAKind, StraightFlush, FourOfAKind, FullHouse, Flush, Straight, ThreeOfAKind, TwoPair, OnePair, HighCard],
-                             'wildValue': 'O',
-                             'wildStatus': 1,
-                             'wheelStatus': 0,
-                             'sfQualify': 5,
-                             'lowestQualified': ['Kc', 'Kd', '4h', '3s', '2c']
-                            },
-                   'deuceswild': {'cardsInHand': 5,
-                                  'handValues': [NaturalRoyalFlush, FourWilds, WildRoyalFlush, FiveOfAKind, StraightFlush, FourOfAKind, FullHouse, Flush, Straight, ThreeOfAKind, HighCard],
-                                  'wildValue': '2',
-                                  'wildStatus': 1,
-                                  'wheelStatus': 0,
-                                  'sfQualify': 5,
-                                  'lowestQualified': null
-                                 },
-                   'threecard': {'cardsInHand': 3,
-                                 'handValues': [StraightFlush, ThreeOfAKind, Straight, Flush, OnePair, HighCard],
-                                 'wildValue': null,
-                                 'wildStatus': 1,
-                                 'wheelStatus': 0,
-                                 'sfQualify': 3,
-                                 'lowestQualified': ['Qh', '3s', '2c']
-                                },
-                   'fourcard': {'cardsInHand': 4,
-                                'handValues': [FourOfAKind, StraightFlush, ThreeOfAKind, Flush, Straight, TwoPair, OnePair, HighCard],
-                                'wildValue': null,
-                                'wildStatus': 1,
-                                'wheelStatus': 0,
-                                'sfQualify': 4,
-                                'lowestQualified': null
-                               },
-                   'fourcardbonus': {'cardsInHand': 4,
-                                     'handValues': [FourOfAKind, StraightFlush, ThreeOfAKind, Flush, Straight, TwoPair, OnePair, HighCard],
-                                     'wildValue': null,
-                                     'wildStatus': 1,
-                                     'wheelStatus': 0,
-                                     'sfQualify': 4,
-                                     'lowestQualified': ['Ac', 'Ad', '3h', '2s']
-                                    },
-                   'paigowpokerfull': {'cardsInHand': 7,
-                                       'handValues': [FiveOfAKind, FourOfAKindPairPlus, StraightFlush, Flush, Straight, FourOfAKind, TwoThreeOfAKind, ThreeOfAKindTwoPair, FullHouse, ThreeOfAKind, ThreePair, TwoPair, OnePair, HighCard],
-                                       'wildValue': 'O',
-                                       'wildStatus': 0,
-                                       'wheelStatus': 1,
-                                       'sfQualify': 5,
-                                       'lowestQualified': null
-                                      },
-                   'paigowpokeralt': {'cardsInHand': 7,
-                                      'handValues': [FourOfAKind, FullHouse, ThreeOfAKind, ThreePair, TwoPair, OnePair, HighCard],
-                                      'wildValue': 'O',
-                                      'wildStatus': 0,
-                                      'wheelStatus': 1,
-                                      'sfQualify': 5,
-                                      'lowestQualified': null
-                                     },
-                   'paigowpokersf6': {'cardsInHand': 7,
-                                      'handValues': [StraightFlush, Flush, Straight],
-                                      'wildValue': 'O',
-                                      'wildStatus': 0,
-                                      'wheelStatus': 1,
-                                      'sfQualify': 6,
-                                      'lowestQualified': null
-                                     },
-                   'paigowpokersf7': {'cardsInHand': 7,
-                                      'handValues': [StraightFlush, Flush, Straight],
-                                      'wildValue': 'O',
-                                      'wildStatus': 0,
-                                      'wheelStatus': 1,
-                                      'sfQualify': 7,
-                                      'lowestQualified': null
-                                     },
-                   'paigowpokerhi': {'cardsInHand': 5,
-                                     'handValues': [FiveOfAKind, StraightFlush, FourOfAKind, FullHouse, Flush, Straight, ThreeOfAKind, TwoPair, OnePair, HighCard],
-                                     'wildValue': 'O',
-                                     'wildStatus': 0,
-                                     'wheelStatus': 1,
-                                     'sfQualify': 5,
-                                     'lowestQualified': null
-                                    },
-                   'paigowpokerlo': {'cardsInHand': 2,
-                                     'handValues': [OnePair, HighCard],
-                                     'wildValue': 'O',
-                                     'wildStatus': 0,
-                                     'wheelStatus': 1,
-                                     'sfQualify': 5,
-                                     'lowestQualified': null
-                                    }
-                  };
+  var gameRules = {
+    'standard': {
+      'cardsInHand': 5,
+      'handValues': [StraightFlush, FourOfAKind, FullHouse, Flush, Straight, ThreeOfAKind, TwoPair, OnePair, HighCard],
+      'wildValue': null,
+      'wildStatus': 1,
+      'wheelStatus': 0,
+      'sfQualify': 5,
+      'lowestQualified': null
+    },
+    'jacksbetter': {
+      'cardsInHand': 5,
+      'handValues': [StraightFlush, FourOfAKind, FullHouse, Flush, Straight, ThreeOfAKind, TwoPair, OnePair, HighCard],
+      'wildValue': null,
+      'wildStatus': 1,
+      'wheelStatus': 0,
+      'sfQualify': 5,
+      'lowestQualified': ['Jc', 'Jd', '4h', '3s', '2c']
+    },
+    'joker': {
+      'cardsInHand': 5,
+      'handValues': [RoyalFlush, FiveOfAKind, StraightFlush, FourOfAKind, FullHouse, Flush, Straight, ThreeOfAKind, TwoPair, OnePair, HighCard],
+      'wildValue': 'O',
+      'wildStatus': 1,
+      'wheelStatus': 0,
+      'sfQualify': 5,
+      'lowestQualified': ['Kc', 'Kd', '4h', '3s', '2c']
+    },
+    'deuceswild': {
+      'cardsInHand': 5,
+      'handValues': [NaturalRoyalFlush, FourWilds, WildRoyalFlush, FiveOfAKind, StraightFlush, FourOfAKind, FullHouse, Flush, Straight, ThreeOfAKind, HighCard],
+      'wildValue': '2',
+      'wildStatus': 1,
+      'wheelStatus': 0,
+      'sfQualify': 5,
+      'lowestQualified': null
+    },
+    'threecard': {
+      'cardsInHand': 3,
+      'handValues': [StraightFlush, ThreeOfAKind, Straight, Flush, OnePair, HighCard],
+      'wildValue': null,
+      'wildStatus': 1,
+      'wheelStatus': 0,
+      'sfQualify': 3,
+      'lowestQualified': ['Qh', '3s', '2c']
+    },
+    'fourcard': {
+      'cardsInHand': 4,
+      'handValues': [FourOfAKind, StraightFlush, ThreeOfAKind, Flush, Straight, TwoPair, OnePair, HighCard],
+      'wildValue': null,
+      'wildStatus': 1,
+      'wheelStatus': 0,
+      'sfQualify': 4,
+      'lowestQualified': null
+    },
+    'fourcardbonus': {
+      'cardsInHand': 4,
+      'handValues': [FourOfAKind, StraightFlush, ThreeOfAKind, Flush, Straight, TwoPair, OnePair, HighCard],
+      'wildValue': null,
+      'wildStatus': 1,
+      'wheelStatus': 0,
+      'sfQualify': 4,
+      'lowestQualified': ['Ac', 'Ad', '3h', '2s']
+    },
+    'paigowpokerfull': {
+      'cardsInHand': 7,
+      'handValues': [FiveOfAKind, FourOfAKindPairPlus, StraightFlush, Flush, Straight, FourOfAKind, TwoThreeOfAKind, ThreeOfAKindTwoPair, FullHouse, ThreeOfAKind, ThreePair, TwoPair, OnePair, HighCard],
+      'wildValue': 'O',
+      'wildStatus': 0,
+      'wheelStatus': 1,
+      'sfQualify': 5,
+      'lowestQualified': null
+    },
+    'paigowpokeralt': {
+      'cardsInHand': 7,
+      'handValues': [FourOfAKind, FullHouse, ThreeOfAKind, ThreePair, TwoPair, OnePair, HighCard],
+      'wildValue': 'O',
+      'wildStatus': 0,
+      'wheelStatus': 1,
+      'sfQualify': 5,
+      'lowestQualified': null
+    },
+    'paigowpokersf6': {
+      'cardsInHand': 7,
+      'handValues': [StraightFlush, Flush, Straight],
+      'wildValue': 'O',
+      'wildStatus': 0,
+      'wheelStatus': 1,
+      'sfQualify': 6,
+      'lowestQualified': null
+    },
+    'paigowpokersf7': {
+      'cardsInHand': 7,
+      'handValues': [StraightFlush, Flush, Straight],
+      'wildValue': 'O',
+      'wildStatus': 0,
+      'wheelStatus': 1,
+      'sfQualify': 7,
+      'lowestQualified': null
+    },
+    'paigowpokerhi': {
+      'cardsInHand': 5,
+      'handValues': [FiveOfAKind, StraightFlush, FourOfAKind, FullHouse, Flush, Straight, ThreeOfAKind, TwoPair, OnePair, HighCard],
+      'wildValue': 'O',
+      'wildStatus': 0,
+      'wheelStatus': 1,
+      'sfQualify': 5,
+      'lowestQualified': null
+    },
+    'paigowpokerlo': {
+      'cardsInHand': 2,
+      'handValues': [OnePair, HighCard],
+      'wildValue': 'O',
+      'wildStatus': 0,
+      'wheelStatus': 1,
+      'sfQualify': 5,
+      'lowestQualified': null
+    }
+  };
+
   /**
    * Base Game class that defines the rules of the game.
    */

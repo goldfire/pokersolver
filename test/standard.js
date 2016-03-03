@@ -14,12 +14,12 @@ var gameForTest = new Game('standard');
 
 describe('A basic hand', function() {
   it('should return a hand with cards sorted descending', function() {
-    var hand = Hand.solve(['Kh', 'Tc', '5d', 'As', '3c', '3s', '2h'], gameForTest);
+    var hand = Hand.solve(['Kh', 'Tc', '5d', 'As', '3c', '3s', '2h']);
     hand.cardPool[0].toString().should.equal('As');
     return hand.cardPool[6].toString().should.equal('2h');
   });
   return it('should return a correct description', function() {
-    var hand = Hand.solve(['Kh', 'Tc', '5d', 'As', '3c', '3s', '2h'], gameForTest);
+    var hand = Hand.solve(['Kh', 'Tc', '5d', 'As', '3c', '3s', '2h']);
     return hand.descr.should.equal('Pair, 3\'s');
   });
 });
@@ -152,39 +152,39 @@ describe('One Pair', function() {
 
 describe('Building hands from 7 cards', function() {
   it('should return best hand as Two Pair', function() {
-    var hand = Hand.solve(['8d', '8s', '4s', '5c', 'Qd', '5d', 'Qh'], gameForTest);
+    var hand = Hand.solve(['8d', '8s', '4s', '5c', 'Qd', '5d', 'Qh']);
     return hand.name.should.equal('Two Pair');
   });
   it('should detect the best hand string (#1)', function() {
-    var hand = Hand.solve(['8d', '8s', '4s', '5c', 'Qd', '5d', 'Qh'], gameForTest);
+    var hand = Hand.solve(['8d', '8s', '4s', '5c', 'Qd', '5d', 'Qh']);
     return hand.toString().should.equal('Qd, Qh, 8d, 8s, 5c');
   });
   return it('should detect the best hand string (#2)', function() {
-    var hand = Hand.solve(['4s', '4h', 'Ah', 'Jc', 'Ts', '7s', '8d'], gameForTest);
+    var hand = Hand.solve(['4s', '4h', 'Ah', 'Jc', 'Ts', '7s', '8d']);
     return hand.toString().should.equal('4s, 4h, Ah, Jc, Ts');
   });
 });
 
 describe('Building hands from 5 cards', function() {
   return it('should return best hand as Two Pair', function() {
-    var hand = Hand.solve(['8d', '8s', 'Qd', 'Ad', 'Qh'], gameForTest);
+    var hand = Hand.solve(['8d', '8s', 'Qd', 'Ad', 'Qh']);
     return hand.name.should.equal('Two Pair');
   });
 });
 
 describe('Deterining winning hands', function() {
   it('should detect the winning hand from a list', function() {
-    var h1 = Hand.solve(['2s', '3s', '4h', '5c', 'As', 'Ts', '8d'], gameForTest);
-    var h2 = Hand.solve(['5s', 'Ts', '3h', 'Ac', '2s', 'Ts', '8d'], gameForTest);
-    var h3 = Hand.solve(['5s', '5h', '3s', '3c', '2s', 'Ts', '3d'], gameForTest);
+    var h1 = Hand.solve(['2s', '3s', '4h', '5c', 'As', 'Ts', '8d']);
+    var h2 = Hand.solve(['5s', 'Ts', '3h', 'Ac', '2s', 'Ts', '8d']);
+    var h3 = Hand.solve(['5s', '5h', '3s', '3c', '2s', 'Ts', '3d']);
     var winners = Hand.winners([h1, h2, h3]);
     winners.length.should.equal(1);
     return winners[0].should.equal(h3);
   });
   return it('should detect the winning hands from a list', function() {
-    var h1 = Hand.solve(['2s', '3s', '4h', '5c', 'As', 'Ts', '8d'], gameForTest);
-    var h2 = Hand.solve(['2h', '3h', '4d', '5d', 'Ah', 'Tc', '8c'], gameForTest);
-    var h3 = Hand.solve(['5s', 'Ts', '3h', 'Ac', '2s', 'Ts', '8d'], gameForTest);
+    var h1 = Hand.solve(['2s', '3s', '4h', '5c', 'As', 'Ts', '8d']);
+    var h2 = Hand.solve(['2h', '3h', '4d', '5d', 'Ah', 'Tc', '8c']);
+    var h3 = Hand.solve(['5s', 'Ts', '3h', 'Ac', '2s', 'Ts', '8d']);
     var winners = Hand.winners([h1, h2, h3]);
     winners.length.should.equal(2);
     (winners.indexOf(h1) >= 0).should.equal(true);

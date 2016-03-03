@@ -31,14 +31,14 @@ var Hand = require('pokersolve').Hand;
 
 Solve two hands and then determine the winner between the two of them.
 ```javascript
-var hand1 = Hand.solve(['Ad', 'As', 'Jc', 'Th', '2d', '3c', 'Kd'], new Game('standard'));
-var hand2 = Hand.solve(['Ad', 'As', 'Jc', 'Th', '2d', 'Qs', 'Qd'], new Game('standard'));
+var hand1 = Hand.solve(['Ad', 'As', 'Jc', 'Th', '2d', '3c', 'Kd']);
+var hand2 = Hand.solve(['Ad', 'As', 'Jc', 'Th', '2d', 'Qs', 'Qd']);
 var winner = Hand.winners([hand1, hand2]); // hand2
 ```
 
 Solve a hand and return the type and the description.
 ```javascript
-var hand = Hand.solve(['Ad', 'As', 'Jc', 'Th', '2d', 'Qs', 'Qd'], new Game('standard'));
+var hand = Hand.solve(['Ad', 'As', 'Jc', 'Th', '2d', 'Qs', 'Qd']);
 console.log(hand.name); // Two Pair
 console.log(hand.descr); // Two Pair, A's & Q's
 ```
@@ -48,7 +48,7 @@ console.log(hand.descr); // Two Pair, A's & Q's
 #### solve(cards, game)
 Solves the hand passed in, whether 3 cards or 7. Returns various information such as name, description, score and cards involved.
 * **cards**: `Array` All cards involved in the hand, example: `['Ad', '2d', '3d', '4d', 'Qc', 'Ks', '7h']`.
-* **game**: `Game` Which rule set is used, based on the game being played. Default: 'standard'
+* **game**: `String` Which rule set is used, based on the game being played. Default: 'standard'
 * **canDisqualify**: `Boolean` Is this hand subject to qualification rules, which some games have? Default: false
 
 #### winners(hands)
