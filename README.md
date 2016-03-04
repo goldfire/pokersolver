@@ -7,6 +7,7 @@ pokersolver is a poker hand solver and comparison tool written in Javascript. It
 * Returning a detailed description (Two Pair, A's & 8's)
 * Comparing an array of hands and returning the winner(s)
 * Identifying all cards involved in creating the winning hand
+* Support for wilds and other game types
 * Works in both the browser and Node.js
 
 ## Installation
