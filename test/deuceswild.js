@@ -15,7 +15,6 @@ var Game = require('../pokersolver').Game;
 var gameForTest = new Game('deuceswild');
 
 // Deuces Wild is designed to be for five cards, but can be for any number.
-// Qualification is not used, as straight hand rank determines pay.
 describe('A basic hand', function() {
   it('should return a hand with cards sorted descending, wilds last', function() {
     var hand = Hand.solve(['Kh', 'Tc', 'As', '3s', '2h'], gameForTest);
@@ -285,5 +284,77 @@ describe('Three of a Kind', function() {
   return it('should be detected as not possible', function() {
     var hand = new ThreeOfAKind(['5c', '7h', '3c', '6c', '2d'], gameForTest);
     return hand.isPossible.should.equal(false);
+  });
+});
+
+describe('Qualifying Hands', function() {
+  it('Royal Flush should qualify', function() {
+    var hand = Hand.solve(['As', 'Or', 'Js', 'Ts', 'Qs'], gameForTest, true);
+    var winners = Hand.winners([hand]);
+    winners.length.should.equal(1);
+    return winners[0].should.equal(hand);
+  });
+  it('Five of a Kind should qualify', function() {
+    var hand = Hand.solve(['7h', '7d', 'Or', '7s', '7c'], gameForTest, true);
+    var winners = Hand.winners([hand]);
+    winners.length.should.equal(1);
+    return winners[0].should.equal(hand);
+  });
+  it('Straight Flush should qualify', function() {
+    var hand = Hand.solve(['7s', '8s', 'Js', 'Ts', '9s'], gameForTest, true);
+    var winners = Hand.winners([hand]);
+    winners.length.should.equal(1);
+    return winners[0].should.equal(hand);
+  });
+  it('Four of a Kind should qualify', function() {
+    var hand = Hand.solve(['7h', '7d', '3s', '7s', '7c'], gameForTest, true);
+    var winners = Hand.winners([hand]);
+    winners.length.should.equal(1);
+    return winners[0].should.equal(hand);
+  });
+  it('Full House should qualify', function() {
+    var hand = Hand.solve(['9c', '9d', 'Or', 'Jc', 'Js'], gameForTest, true);
+    var winners = Hand.winners([hand]);
+    winners.length.should.equal(1);
+    return winners[0].should.equal(hand);
+  });
+  it('Flush should qualify', function() {
+    var hand = Hand.solve(['7s', '8s', 'Js', 'Ts', 'Qs'], gameForTest, true);
+    var winners = Hand.winners([hand]);
+    winners.length.should.equal(1);
+    return winners[0].should.equal(hand);
+  });
+  it('Straight should qualify', function() {
+    var hand = Hand.solve(['7s', '8d', 'Js', 'Ts', '9s'], gameForTest, true);
+    var winners = Hand.winners([hand]);
+    winners.length.should.equal(1);
+    return winners[0].should.equal(hand);
+  });
+  it('Three of a Kind should qualify', function() {
+    var hand = Hand.solve(['7h', '7d', '3s', '4s', '7c'], gameForTest, true);
+    var winners = Hand.winners([hand]);
+    winners.length.should.equal(1);
+    return winners[0].should.equal(hand);
+  });
+  it('Three of a Kind should qualify with deuces', function() {
+    var hand = Hand.solve(['2h', '2d', '3s', '2s', '7c'], gameForTest, true);
+    var winners = Hand.winners([hand]);
+    winners.length.should.equal(1);
+    return winners[0].should.equal(hand);
+  });
+  it('Two Pair should not qualify', function() {
+    var hand = Hand.solve(['5c', '4s', '4c', '3d', '3h'], gameForTest, true);
+    var winners = Hand.winners([hand]);
+    return winners.length.should.equal(0);
+  });
+  it('One Pair should not qualify', function() {
+    var hand = Hand.solve(['Ah', 'As', '6d', '3s', '4h'], gameForTest, true);
+    var winners = Hand.winners([hand]);
+    return winners.length.should.equal(0);
+  });
+  it('High Card should not qualify', function() {
+    var hand = Hand.solve(['Qh', '9s', 'Ad', 'Ks', 'Jh'], gameForTest, true);
+    var winners = Hand.winners([hand]);
+    return winners.length.should.equal(0);
   });
 });

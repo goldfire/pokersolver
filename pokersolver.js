@@ -37,7 +37,7 @@
   }
 
   /**
-   * Base Hand class that handles comparissons of full hands.
+   * Base Hand class that handles comparisons of full hands.
    */
   class Hand {
     constructor(cards, name, game, canDisqualify) {
@@ -66,7 +66,7 @@
       }
       this.rank = handRank - i;
 
-      // setup the pool of cards
+      // Set up the pool of cards.
       this.cardPool = cards.map(function(c) {
         return (typeof c === 'string') ? new Card(c) : c;
       });
@@ -1658,12 +1658,12 @@
     },
     'joker': {
       'cardsInHand': 5,
-      'handValues': [RoyalFlush, FiveOfAKind, StraightFlush, FourOfAKind, FullHouse, Flush, Straight, ThreeOfAKind, TwoPair, OnePair, HighCard],
+      'handValues': [NaturalRoyalFlush, FiveOfAKind, WildRoyalFlush, StraightFlush, FourOfAKind, FullHouse, Flush, Straight, ThreeOfAKind, TwoPair, HighCard],
       'wildValue': 'O',
       'wildStatus': 1,
       'wheelStatus': 0,
       'sfQualify': 5,
-      'lowestQualified': ['Kc', 'Kd', '4h', '3s', '2c']
+      'lowestQualified': ['4c', '3d', '3h', '2s', '2c']
     },
     'deuceswild': {
       'cardsInHand': 5,
@@ -1672,7 +1672,7 @@
       'wildStatus': 1,
       'wheelStatus': 0,
       'sfQualify': 5,
-      'lowestQualified': null
+      'lowestQualified': ['5c', '4d', '3h', '3s', '3c']
     },
     'threecard': {
       'cardsInHand': 3,
