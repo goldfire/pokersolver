@@ -1658,12 +1658,12 @@
     },
     'joker': {
       'cardsInHand': 5,
-      'handValues': [RoyalFlush, FiveOfAKind, StraightFlush, FourOfAKind, FullHouse, Flush, Straight, ThreeOfAKind, TwoPair, OnePair, HighCard],
+      'handValues': [NaturalRoyalFlush, FiveOfAKind, WildRoyalFlush, StraightFlush, FourOfAKind, FullHouse, Flush, Straight, ThreeOfAKind, TwoPair, HighCard],
       'wildValue': 'O',
       'wildStatus': 1,
       'wheelStatus': 0,
       'sfQualify': 5,
-      'lowestQualified': ['Kc', 'Kd', '4h', '3s', '2c']
+      'lowestQualified': null
     },
     'deuceswild': {
       'cardsInHand': 5,

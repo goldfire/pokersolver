@@ -1,20 +1,21 @@
 var should = require('should');
 var Hand = require('../pokersolver').Hand;
-var Flush = require('../pokersolver').Flush;
-var StraightFlush = require('../pokersolver').StraightFlush;
-var RoyalFlush = require('../pokersolver').RoyalFlush;
-var Straight = require('../pokersolver').Straight;
+var NaturalRoyalFlush = require('../pokersolver').NaturalRoyalFlush;
 var FiveOfAKind = require('../pokersolver').FiveOfAKind;
+var WildRoyalFlush = require('../pokersolver').WildRoyalFlush;
+var StraightFlush = require('../pokersolver').StraightFlush;
 var FourOfAKind = require('../pokersolver').FourOfAKind;
 var FullHouse = require('../pokersolver').FullHouse;
+var Flush = require('../pokersolver').Flush;
+var Straight = require('../pokersolver').Straight;
 var ThreeOfAKind = require('../pokersolver').ThreeOfAKind;
 var TwoPair = require('../pokersolver').TwoPair;
-var OnePair = require('../pokersolver').OnePair;
 var Game = require('../pokersolver').Game;
 
 var gameForTest = new Game('joker');
 
 // Joker Poker is designed to be for five cards, but can be for any number.
+// Qualification is not used, as straight hand rank determines pay.
 describe('A basic hand', function() {
   it('should return a hand with cards sorted descending', function() {
     var hand = Hand.solve(['Kh', 'Tc', 'As', '3s', '2h'], gameForTest);
@@ -27,39 +28,46 @@ describe('A basic hand', function() {
     return hand.cardPool[4].toString().should.equal('Ar');
   });
   return it('should return a correct description with a joker', function() {
-    var hand = Hand.solve(['Kh', 'As', 'Or', '3s', '2h'], gameForTest);
-    return hand.descr.should.equal('Pair, A\'s');
+    var hand = Hand.solve(['Kh', 'As', '3c', '3s', 'Or'], gameForTest);
+    return hand.descr.should.equal('Three of a Kind, 3\'s');
   });
 });
 
-describe('A Royal Flush', function() {
+describe('A Natural Royal Flush', function() {
   it('should be detected as possible', function() {
-    var hand = new RoyalFlush(['As', 'Qs', 'Js', 'Ts', 'Ks'], gameForTest);
+    var hand = new NaturalRoyalFlush(['As', 'Qs', 'Js', 'Ts', 'Ks'], gameForTest);
     return hand.isPossible.should.equal(true);
   });
   it('should be detected as not possible', function() {
-    var hand = new RoyalFlush(['7s', '8s', 'Js', 'Ts', '9s'], gameForTest);
+    var hand = new NaturalRoyalFlush(['7s', '8s', 'Js', 'Ts', '9s'], gameForTest);
     return hand.isPossible.should.equal(false);
   });
-  it('should be detected as possible with a joker - inside', function() {
-    var hand = new RoyalFlush(['Ks', 'As', 'Js', 'Ts', 'Or'], gameForTest);
+  return it('should be detected as not possible with a joker', function() {
+    var hand = new NaturalRoyalFlush(['Or', 'Ks', 'Js', 'Ts', 'Qs'], gameForTest);
+    return hand.isPossible.should.equal(false);
+  });
+});
+
+describe('A Wild Royal Flush', function() {
+  it('should be detected as possible', function() {
+    var hand = new WildRoyalFlush(['As', 'Or', 'Js', 'Ts', 'Ks'], gameForTest);
     return hand.isPossible.should.equal(true);
   });
+  it('should be detected as not possible', function() {
+    var hand = new WildRoyalFlush(['7s', 'Or', 'Js', 'Ts', '9s'], gameForTest);
+    return hand.isPossible.should.equal(false);
+  });
   it('should be detected as possible with a joker - outside', function() {
-    var hand = new RoyalFlush(['Ks', 'Qs', 'Js', 'Ts', 'Or'], gameForTest);
+    var hand = new WildRoyalFlush(['Ks', 'Qs', 'Js', 'Ts', 'Or'], gameForTest);
     hand.isPossible.should.equal(true);
   });
   it('should be detected as possible with two jokers - inside/outside', function() {
-    var hand = new RoyalFlush(['Or', 'Qs', 'Ts', 'Ks', 'Or'], gameForTest);
+    var hand = new WildRoyalFlush(['Or', 'Qs', 'Ts', 'Ks', 'Or'], gameForTest);
     hand.isPossible.should.equal(true);
   });
-  it('should be detected as possible with jokers - can set as low', function() {
-    var hand = new RoyalFlush(['Qs', 'Or', 'As', 'Js', 'Ks'], gameForTest);
+  return it('should be detected as possible with jokers - can set as low', function() {
+    var hand = new WildRoyalFlush(['Qs', 'Or', 'As', 'Js', 'Ks'], gameForTest);
     hand.isPossible.should.equal(true);
-  });
-  return it('should be detected as not possible, even with a joker', function() {
-    var hand = new RoyalFlush(['Or', '8s', 'Js', 'Ts', '9s'], gameForTest);
-    return hand.isPossible.should.equal(false);
   });
 });
 
@@ -272,99 +280,5 @@ describe('Two Pair', function() {
   return it('should be detected as not possible', function() {
     var hand = new TwoPair(['5c', '6s', '6h', '7c', '2d', 'Ts', '8d'], gameForTest);
     return hand.isPossible.should.equal(false);
-  });
-});
-
-describe('One Pair', function() {
-  it('should be detected as possible', function() {
-    var hand = new OnePair(['5h', '5c', '7s', '9s', '2d'], gameForTest);
-    return hand.isPossible.should.equal(true);
-  });
-  it('should be detected as not possible', function() {
-    var hand = new OnePair(['5h', '6s', '2s', 'Ts', '8d'], gameForTest);
-    return hand.isPossible.should.equal(false);
-  });
-  return it('should be detected as possible with joker', function() {
-    var hand = new OnePair(['5h', 'Or', '7s', '6c', 'Ts'], gameForTest);
-    return hand.isPossible.should.equal(true);
-  });
-});
-
-describe('Qualifying Hands', function() {
-  it('Royal Flush should qualify', function() {
-    var hand = Hand.solve(['As', 'Or', 'Js', 'Ts', 'Qs'], gameForTest, true);
-    var winners = Hand.winners([hand]);
-    winners.length.should.equal(1);
-    return winners[0].should.equal(hand);
-  });
-  it('Five of a Kind should qualify', function() {
-    var hand = Hand.solve(['7h', '7d', 'Or', '7s', '7c'], gameForTest, true);
-    var winners = Hand.winners([hand]);
-    winners.length.should.equal(1);
-    return winners[0].should.equal(hand);
-  });
-  it('Straight Flush should qualify', function() {
-    var hand = Hand.solve(['7s', '8s', 'Js', 'Ts', '9s'], gameForTest, true);
-    var winners = Hand.winners([hand]);
-    winners.length.should.equal(1);
-    return winners[0].should.equal(hand);
-  });
-  it('Four of a Kind should qualify', function() {
-    var hand = Hand.solve(['7h', '7d', '3s', '7s', '7c'], gameForTest, true);
-    var winners = Hand.winners([hand]);
-    winners.length.should.equal(1);
-    return winners[0].should.equal(hand);
-  });
-  it('Full House should qualify', function() {
-    var hand = Hand.solve(['9c', '9d', 'Or', 'Jc', 'Js'], gameForTest, true);
-    var winners = Hand.winners([hand]);
-    winners.length.should.equal(1);
-    return winners[0].should.equal(hand);
-  });
-  it('Flush should qualify', function() {
-    var hand = Hand.solve(['7s', '8s', 'Js', 'Ts', 'Qs'], gameForTest, true);
-    var winners = Hand.winners([hand]);
-    winners.length.should.equal(1);
-    return winners[0].should.equal(hand);
-  });
-  it('Straight should qualify', function() {
-    var hand = Hand.solve(['7s', '8d', 'Js', 'Ts', '9s'], gameForTest, true);
-    var winners = Hand.winners([hand]);
-    winners.length.should.equal(1);
-    return winners[0].should.equal(hand);
-  });
-  it('Three of a Kind should qualify', function() {
-    var hand = Hand.solve(['7h', '7d', '3s', '2s', '7c'], gameForTest, true);
-    var winners = Hand.winners([hand]);
-    winners.length.should.equal(1);
-    return winners[0].should.equal(hand);
-  });
-  it('Two Pair should qualify', function() {
-    var hand = Hand.solve(['9c', '9d', 'Ah', 'Jc', 'Js'], gameForTest, true);
-    var winners = Hand.winners([hand]);
-    winners.length.should.equal(1);
-    return winners[0].should.equal(hand);
-  });
-  it('Pair of Aces should qualify', function() {
-    var hand = Hand.solve(['Ah', 'As', '6d', '3s', '2h'], gameForTest, true);
-    var winners = Hand.winners([hand]);
-    winners.length.should.equal(1);
-    return winners[0].should.equal(hand);
-  });
-  it('Lowest Possible Pair of Kings should qualify', function() {
-    var hand = Hand.solve(['Kh', 'Ks', '4d', '3s', '2h'], gameForTest, true);
-    var winners = Hand.winners([hand]);
-    winners.length.should.equal(1);
-    return winners[0].should.equal(hand);
-  });
-  it('Highest Possible Pair of Queens should not qualify', function() {
-    var hand = Hand.solve(['Qh', 'Qs', 'Ad', 'Ks', 'Jh'], gameForTest, true);
-    var winners = Hand.winners([hand]);
-    return winners.length.should.equal(0);
-  });
-  it('High Card should not qualify', function() {
-    var hand = Hand.solve(['Qh', '9s', 'Ad', 'Ks', 'Jh'], gameForTest, true);
-    var winners = Hand.winners([hand]);
-    return winners.length.should.equal(0);
   });
 });
