@@ -37,7 +37,7 @@
   }
 
   /**
-   * Base Hand class that handles comparissons of full hands.
+   * Base Hand class that handles comparisons of full hands.
    */
   class Hand {
     constructor(cards, name, game, canDisqualify) {
@@ -66,7 +66,7 @@
       }
       this.rank = handRank - i;
 
-      // setup the pool of cards
+      // Set up the pool of cards.
       this.cardPool = cards.map(function(c) {
         return (typeof c === 'string') ? new Card(c) : c;
       });
