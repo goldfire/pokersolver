@@ -282,3 +282,70 @@ describe('Two Pair', function() {
     return hand.isPossible.should.equal(false);
   });
 });
+
+describe('Qualifying Hands', function() {
+  it('Royal Flush should qualify', function() {
+    var hand = Hand.solve(['As', 'Or', 'Js', 'Ts', 'Qs'], gameForTest, true);
+    var winners = Hand.winners([hand]);
+    winners.length.should.equal(1);
+    return winners[0].should.equal(hand);
+  });
+  it('Five of a Kind should qualify', function() {
+    var hand = Hand.solve(['7h', '7d', 'Or', '7s', '7c'], gameForTest, true);
+    var winners = Hand.winners([hand]);
+    winners.length.should.equal(1);
+    return winners[0].should.equal(hand);
+  });
+  it('Straight Flush should qualify', function() {
+    var hand = Hand.solve(['7s', '8s', 'Js', 'Ts', '9s'], gameForTest, true);
+    var winners = Hand.winners([hand]);
+    winners.length.should.equal(1);
+    return winners[0].should.equal(hand);
+  });
+  it('Four of a Kind should qualify', function() {
+    var hand = Hand.solve(['7h', '7d', '3s', '7s', '7c'], gameForTest, true);
+    var winners = Hand.winners([hand]);
+    winners.length.should.equal(1);
+    return winners[0].should.equal(hand);
+  });
+  it('Full House should qualify', function() {
+    var hand = Hand.solve(['9c', '9d', 'Or', 'Jc', 'Js'], gameForTest, true);
+    var winners = Hand.winners([hand]);
+    winners.length.should.equal(1);
+    return winners[0].should.equal(hand);
+  });
+  it('Flush should qualify', function() {
+    var hand = Hand.solve(['7s', '8s', 'Js', 'Ts', 'Qs'], gameForTest, true);
+    var winners = Hand.winners([hand]);
+    winners.length.should.equal(1);
+    return winners[0].should.equal(hand);
+  });
+  it('Straight should qualify', function() {
+    var hand = Hand.solve(['7s', '8d', 'Js', 'Ts', '9s'], gameForTest, true);
+    var winners = Hand.winners([hand]);
+    winners.length.should.equal(1);
+    return winners[0].should.equal(hand);
+  });
+  it('Three of a Kind should qualify', function() {
+    var hand = Hand.solve(['7h', '7d', '3s', '2s', '7c'], gameForTest, true);
+    var winners = Hand.winners([hand]);
+    winners.length.should.equal(1);
+    return winners[0].should.equal(hand);
+  });
+  it('Two Pair should qualify', function() {
+    var hand = Hand.solve(['4c', '3d', '3h', '2s', '2c'], gameForTest, true);
+    var winners = Hand.winners([hand]);
+    winners.length.should.equal(1);
+    return winners[0].should.equal(hand);
+  });
+  it('One Pair should not qualify', function() {
+    var hand = Hand.solve(['Ah', 'As', '6d', '3s', '2h'], gameForTest, true);
+    var winners = Hand.winners([hand]);
+    return winners.length.should.equal(0);
+  });
+  it('High Card should not qualify', function() {
+    var hand = Hand.solve(['Qh', '9s', 'Ad', 'Ks', 'Jh'], gameForTest, true);
+    var winners = Hand.winners([hand]);
+    return winners.length.should.equal(0);
+  });
+});

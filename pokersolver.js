@@ -1663,7 +1663,7 @@
       'wildStatus': 1,
       'wheelStatus': 0,
       'sfQualify': 5,
-      'lowestQualified': null
+      'lowestQualified': ['4c', '3d', '3h', '2s', '2c']
     },
     'deuceswild': {
       'cardsInHand': 5,
@@ -1672,7 +1672,7 @@
       'wildStatus': 1,
       'wheelStatus': 0,
       'sfQualify': 5,
-      'lowestQualified': null
+      'lowestQualified': ['5c', '4d', '3h', '3s', '3c']
     },
     'threecard': {
       'cardsInHand': 3,
