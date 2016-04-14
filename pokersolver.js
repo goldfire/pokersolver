@@ -585,6 +585,10 @@
         }
       }
 
+      if (typeof game !== 'undefined' && game.noKickers) {
+        this.cards.length = 4;
+      }
+
       if (this.cards.length >= 4) {
         this.descr = this.name + ', ' + this.cards[0].wildValue + '\'s';
       }
@@ -602,6 +606,10 @@
       if (this.wilds.length === 4) {
         this.cards = this.wilds;
         this.cards = this.cards.concat(this.nextHighest().slice(0, this.game.cardsInHand-4));
+      }
+
+      if (typeof game !== 'undefined' && game.noKickers) {
+        this.cards.length = 4;
       }
 
       if (this.cards.length >= 4) {
@@ -1067,6 +1075,10 @@
         }
       }
 
+      if (typeof game !== 'undefined' && game.noKickers) {
+        this.cards.length = 3;
+      }
+
       if (this.cards.length >= 3) {
         this.descr = this.name + ', ' + this.cards[0].value + '\'s';
       }
@@ -1199,6 +1211,10 @@
         }
       }
 
+      if (typeof game !== 'undefined' && game.noKickers) {
+        this.cards.length = 4;
+      }
+
       if (this.cards.length >= 4) {
         var type = this.cards[0].value + '\'s & ' + this.cards[2].value + '\'s';
         this.descr = this.name + ', ' + type;
@@ -1234,6 +1250,10 @@
         }
       }
 
+      if (typeof game !== 'undefined' && game.noKickers) {
+        this.cards.length = 2;
+      }
+
       if (this.cards.length >= 2) {
         this.descr = this.name + ', ' + this.cards[0].value + '\'s';
       }
@@ -1256,6 +1276,10 @@
           this.cards[i].wildValue = 'A';
           this.cards[i].rank = values.indexOf('A');
         }
+      }
+
+      if (typeof game !== 'undefined' && game.noKickers) {
+        this.cards.length = 1;
       }
 
       this.cards = this.cards.sort(Card.sort);
@@ -1645,7 +1669,8 @@
       'wildStatus': 1,
       'wheelStatus': 0,
       'sfQualify': 5,
-      'lowestQualified': null
+      'lowestQualified': null,
+      "noKickers": false
     },
     'jacksbetter': {
       'cardsInHand': 5,
@@ -1654,7 +1679,8 @@
       'wildStatus': 1,
       'wheelStatus': 0,
       'sfQualify': 5,
-      'lowestQualified': ['Jc', 'Jd', '4h', '3s', '2c']
+      'lowestQualified': ['Jc', 'Jd', '4h', '3s', '2c'],
+      "noKickers": true
     },
     'joker': {
       'cardsInHand': 5,
@@ -1663,7 +1689,8 @@
       'wildStatus': 1,
       'wheelStatus': 0,
       'sfQualify': 5,
-      'lowestQualified': ['4c', '3d', '3h', '2s', '2c']
+      'lowestQualified': ['4c', '3d', '3h', '2s', '2c'],
+      "noKickers": true
     },
     'deuceswild': {
       'cardsInHand': 5,
@@ -1672,7 +1699,8 @@
       'wildStatus': 1,
       'wheelStatus': 0,
       'sfQualify': 5,
-      'lowestQualified': ['5c', '4d', '3h', '3s', '3c']
+      'lowestQualified': ['5c', '4d', '3h', '3s', '3c'],
+      "noKickers": true
     },
     'threecard': {
       'cardsInHand': 3,
@@ -1681,7 +1709,8 @@
       'wildStatus': 1,
       'wheelStatus': 0,
       'sfQualify': 3,
-      'lowestQualified': ['Qh', '3s', '2c']
+      'lowestQualified': ['Qh', '3s', '2c'],
+      "noKickers": true
     },
     'fourcard': {
       'cardsInHand': 4,
@@ -1690,7 +1719,8 @@
       'wildStatus': 1,
       'wheelStatus': 0,
       'sfQualify': 4,
-      'lowestQualified': null
+      'lowestQualified': null,
+      "noKickers": true
     },
     'fourcardbonus': {
       'cardsInHand': 4,
@@ -1699,7 +1729,8 @@
       'wildStatus': 1,
       'wheelStatus': 0,
       'sfQualify': 4,
-      'lowestQualified': ['Ac', 'Ad', '3h', '2s']
+      'lowestQualified': ['Ac', 'Ad', '3h', '2s'],
+      "noKickers": true
     },
     'paigowpokerfull': {
       'cardsInHand': 7,
