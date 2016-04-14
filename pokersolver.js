@@ -173,7 +173,6 @@
 
       for (var i=0; i<this.wilds.length; i++) {
         var wild = this.wilds[i];
-        wild.suit = suit;
 
         if (setRanks) {
           var j=0;
@@ -391,7 +390,7 @@
       if (this.cards[0] && this.cards[0].rank === 13) {
         this.descr = 'Royal Flush';
       } else if (this.cards.length >= this.game.sfQualify) {
-        this.descr = this.name + ', ' + this.cards[0].toString() + ' High';
+        this.descr = this.name + ', ' + this.cards[0].toString()[0] + suit + ' High';
       }
 
       return this.cards.length >= this.game.sfQualify;
@@ -783,7 +782,7 @@
       }
 
       if (this.cards.length >= this.game.sfQualify) {
-        this.descr = this.name + ', ' + this.cards[0].toString() + ' High';
+        this.descr = this.name + ', ' + this.cards[0].toString()[0] + suit + ' High';
         this.sfLength = this.cards.length;
         if (this.cards.length < this.game.cardsInHand) {
           this.cards = this.cards.concat(this.nextHighest().slice(0, this.game.cardsInHand-this.cards.length));
