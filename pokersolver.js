@@ -1,5 +1,5 @@
 /**
- * pokersolver v2.1.0
+ * pokersolver v2.1.1
  * Copyright (c) 2016, James Simpson of GoldFire Studios
  * http://goldfirestudios.com
  */
