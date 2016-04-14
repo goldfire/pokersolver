@@ -585,11 +585,11 @@
         }
       }
 
-      if (typeof game !== 'undefined' && game.noKickers) {
-        this.cards.length = 4;
-      }
-
       if (this.cards.length >= 4) {
+        if (this.game.noKickers) {
+          this.cards.length = 4;
+        }
+
         this.descr = this.name + ', ' + this.cards[0].wildValue + '\'s';
       }
 
@@ -608,11 +608,11 @@
         this.cards = this.cards.concat(this.nextHighest().slice(0, this.game.cardsInHand-4));
       }
 
-      if (typeof game !== 'undefined' && game.noKickers) {
-        this.cards.length = 4;
-      }
-
       if (this.cards.length >= 4) {
+        if (this.game.noKickers) {
+          this.cards.length = 4;
+        }
+
         this.descr = this.name;
       }
 
@@ -1075,11 +1075,11 @@
         }
       }
 
-      if (typeof game !== 'undefined' && game.noKickers) {
-        this.cards.length = 3;
-      }
-
       if (this.cards.length >= 3) {
+        if (this.game.noKickers) {
+          this.cards.length = 3;
+        }
+
         this.descr = this.name + ', ' + this.cards[0].value + '\'s';
       }
 
@@ -1211,11 +1211,11 @@
         }
       }
 
-      if (typeof game !== 'undefined' && game.noKickers) {
-        this.cards.length = 4;
-      }
-
       if (this.cards.length >= 4) {
+        if (this.game.noKickers) {
+          this.cards.length = 4;
+        }
+
         var type = this.cards[0].value + '\'s & ' + this.cards[2].value + '\'s';
         this.descr = this.name + ', ' + type;
       }
@@ -1250,11 +1250,11 @@
         }
       }
 
-      if (typeof game !== 'undefined' && game.noKickers) {
-        this.cards.length = 2;
-      }
-
       if (this.cards.length >= 2) {
+        if (this.game.noKickers) {
+          this.cards.length = 2;
+        }
+
         this.descr = this.name + ', ' + this.cards[0].value + '\'s';
       }
 
@@ -1278,7 +1278,7 @@
         }
       }
 
-      if (typeof game !== 'undefined' && game.noKickers) {
+      if (this.game.noKickers) {
         this.cards.length = 1;
       }
 
@@ -1710,7 +1710,7 @@
       'wheelStatus': 0,
       'sfQualify': 3,
       'lowestQualified': ['Qh', '3s', '2c'],
-      "noKickers": true
+      "noKickers": false
     },
     'fourcard': {
       'cardsInHand': 4,
@@ -1801,6 +1801,7 @@
       this.wheelStatus = 0;
       this.sfQualify = 5;
       this.lowestQualified = null;
+      this.noKickers = null;
 
       // Set values based on the game rules.
       if (!this.descr || !gameRules[this.descr]) {
@@ -1813,6 +1814,7 @@
       this.wheelStatus = gameRules[this.descr]['wheelStatus'];
       this.sfQualify = gameRules[this.descr]['sfQualify'];
       this.lowestQualified = gameRules[this.descr]['lowestQualified'];
+      this.noKickers = gameRules[this.descr]['noKickers'];
     }
   }
 
