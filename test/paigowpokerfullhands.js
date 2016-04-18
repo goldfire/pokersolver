@@ -118,7 +118,7 @@ describe('A Straight Flush with No Pair', function() {
   });
   return it('should be split according to House Way, 7 cards', function() {
     var hand = PaiGowPokerHelper.solve(['7s', '8s', 'Js', 'Ts', '9s', 'Qd', '6c']);
-    hand.hiHand.descr.should.equal('Straight, T High');
+    hand.hiHand.descr.should.equal('Straight, 10 High');
     return hand.loHand.descr.should.equal('Q High');
   });
 });
@@ -149,7 +149,7 @@ describe('A Straight Flush with One Pair', function() {
   });
   return it('should be split according to House Way, Pair without preservation', function() {
     var hand = PaiGowPokerHelper.solve(['7s', '8s', '9s', 'Ts', '6s', 'Qd', '6c']);
-    hand.hiHand.descr.should.equal('Straight Flush, Ts High');
+    hand.hiHand.descr.should.equal('Straight Flush, 10s High');
     return hand.loHand.descr.should.equal('Q High');
   });
 });
@@ -260,12 +260,12 @@ describe('A Four of a Kind', function() {
   });
   it('should be split according to House Way', function() {
     var hand = PaiGowPokerHelper.solve(['Th', 'Td', 'Tc', 'Ts', 'Jc', 'Kh', 'Qd']);
-    hand.hiHand.descr.should.equal('Pair, T\'s');
-    return hand.loHand.descr.should.equal('Pair, T\'s');
+    hand.hiHand.descr.should.equal('Pair, 10\'s');
+    return hand.loHand.descr.should.equal('Pair, 10\'s');
   });
   it('should be split according to House Way', function() {
     var hand = PaiGowPokerHelper.solve(['Th', 'Td', 'Tc', 'Ts', 'Jc', 'Ah', 'Qd']);
-    hand.hiHand.descr.should.equal('Four of a Kind, T\'s');
+    hand.hiHand.descr.should.equal('Four of a Kind, 10\'s');
     return hand.loHand.descr.should.equal('A High');
   });
   return it('should be split according to House Way', function() {
@@ -425,7 +425,7 @@ describe('High Card', function() {
   it('should be split according to House Way', function() {
     var hand = PaiGowPokerHelper.solve(['5h', '6c', '7s', '9s', '2d', 'Kh', 'Tc']);
     hand.hiHand.descr.should.equal('K High');
-    return hand.loHand.descr.should.equal('T High');
+    return hand.loHand.descr.should.equal('10 High');
   });
 });
 

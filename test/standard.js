@@ -115,7 +115,7 @@ describe('Three of a Kind', function() {
   it('should be detected as possible', function() {
     var hand = new ThreeOfAKind(['5c', '5s', '5h', '6c', 'Td', '9s', '2d'], gameForTest);
     hand.isPossible.should.equal(true);
-    return hand.toString().should.equal('5c, 5s, 5h, Td, 9s');
+    return hand.toString().should.equal('5c, 5s, 5h, 10d, 9s');
   });
   return it('should be detected as not possible', function() {
     var hand = new ThreeOfAKind(['5c', '2h', '5h', '6c', 'Ts', '9s', '2d'], gameForTest);
@@ -161,7 +161,7 @@ describe('Building hands from 7 cards', function() {
   });
   return it('should detect the best hand string (#2)', function() {
     var hand = Hand.solve(['4s', '4h', 'Ah', 'Jc', 'Ts', '7s', '8d']);
-    return hand.toString().should.equal('4s, 4h, Ah, Jc, Ts');
+    return hand.toString().should.equal('4s, 4h, Ah, Jc, 10s');
   });
 });
 

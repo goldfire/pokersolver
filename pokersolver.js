@@ -1,5 +1,5 @@
 /**
- * pokersolver v2.1.1
+ * pokersolver v2.1.2
  * Copyright (c) 2016, James Simpson of GoldFire Studios
  * http://goldfirestudios.com
  */
@@ -22,7 +22,7 @@
     }
 
     toString() {
-      return this.wildValue + this.suit;
+      return this.wildValue.replace('T', '10') + this.suit;
     }
 
     static sort(a, b) {
@@ -390,7 +390,7 @@
       if (this.cards[0] && this.cards[0].rank === 13) {
         this.descr = 'Royal Flush';
       } else if (this.cards.length >= this.game.sfQualify) {
-        this.descr = this.name + ', ' + this.cards[0].toString()[0] + suit + ' High';
+        this.descr = this.name + ', ' + this.cards[0].toString().slice(0, -1) + suit + ' High';
       }
 
       return this.cards.length >= this.game.sfQualify;
@@ -486,7 +486,7 @@
       }
 
       if (this.cards.length >= 5) {
-        this.descr = this.name + ', ' + this.cards[0].wildValue + '\'s';
+        this.descr = this.name + ', ' + this.cards[0].toString().slice(0, -1) + '\'s';
       }
 
       return this.cards.length >= 5;
@@ -549,7 +549,7 @@
       }
 
       if (this.cards.length >= 6) {
-        var type = this.cards[0].value + '\'s over ' + this.cards[4].value + '\'s';
+        var type = this.cards[0].toString().slice(0, -1) + '\'s over ' + this.cards[4].toString().slice(0, -1) + '\'s';
         this.descr = this.name + ', ' + type;
       }
 
@@ -589,7 +589,7 @@
           this.cards.length = 4;
         }
 
-        this.descr = this.name + ', ' + this.cards[0].wildValue + '\'s';
+        this.descr = this.name + ', ' + this.cards[0].toString().slice(0, -1) + '\'s';
       }
 
       return this.cards.length >= 4;
@@ -692,7 +692,7 @@
       }
 
       if (this.cards.length >= 7) {
-        var type = this.cards[0].value + '\'s over ' + this.cards[3].value + '\'s & ' + this.cards[5].value + '\'s';
+        var type = this.cards[0].toString().slice(0, -1) + '\'s over ' + this.cards[3].toString().slice(0, -1) + '\'s & ' + this.cards[5].value + '\'s';
         this.descr = this.name + ', ' + type;
       }
 
@@ -756,7 +756,7 @@
       }
 
       if (this.cards.length >= 5) {
-        var type = this.cards[0].value + '\'s over ' + this.cards[3].value + '\'s';
+        var type = this.cards[0].toString().slice(0, -1) + '\'s over ' + this.cards[3].toString().slice(0, -1) + '\'s';
         this.descr = this.name + ', ' + type;
       }
 
@@ -782,7 +782,7 @@
       }
 
       if (this.cards.length >= this.game.sfQualify) {
-        this.descr = this.name + ', ' + this.cards[0].toString()[0] + suit + ' High';
+        this.descr = this.name + ', ' + this.cards[0].toString().slice(0, -1) + suit + ' High';
         this.sfLength = this.cards.length;
         if (this.cards.length < this.game.cardsInHand) {
           this.cards = this.cards.concat(this.nextHighest().slice(0, this.game.cardsInHand-this.cards.length));
@@ -871,7 +871,7 @@
         this.cards = this.cards.sort(Card.sort);
       }
       if (this.cards.length >= this.game.sfQualify) {
-        this.descr = this.name + ', ' + this.cards[0].wildValue + ' High';
+        this.descr = this.name + ', ' + this.cards[0].toString().slice(0, -1) + ' High';
         this.cards = this.cards.slice(0, this.game.cardsInHand);
         this.sfLength = this.cards.length;
         if (this.cards.length < this.game.cardsInHand) {
@@ -1040,7 +1040,7 @@
       }
 
       if (this.cards.length >= 6) {
-        var type = this.cards[0].value + '\'s & ' + this.cards[3].value + '\'s';
+        var type = this.cards[0].toString().slice(0, -1) + '\'s & ' + this.cards[3].toString().slice(0, -1) + '\'s';
         this.descr = this.name + ', ' + type;
       }
 
@@ -1079,7 +1079,7 @@
           this.cards.length = 3;
         }
 
-        this.descr = this.name + ', ' + this.cards[0].value + '\'s';
+        this.descr = this.name + ', ' + this.cards[0].toString().slice(0, -1) + '\'s';
       }
 
       return this.cards.length >= 3;
@@ -1153,7 +1153,7 @@
       }
 
       if (this.cards.length >= 6) {
-        var type = this.cards[0].value + '\'s & ' + this.cards[2].value + '\'s & ' + this.cards[4].value + '\'s';
+        var type = this.cards[0].toString().slice(0, -1) + '\'s & ' + this.cards[2].toString().slice(0, -1) + '\'s & ' + this.cards[4].toString().slice(0, -1) + '\'s';
         this.descr = this.name + ', ' + type;
       }
 
@@ -1215,7 +1215,7 @@
           this.cards.length = 4;
         }
 
-        var type = this.cards[0].value + '\'s & ' + this.cards[2].value + '\'s';
+        var type = this.cards[0].toString().slice(0, -1) + '\'s & ' + this.cards[2].toString().slice(0, -1) + '\'s';
         this.descr = this.name + ', ' + type;
       }
 
@@ -1254,7 +1254,7 @@
           this.cards.length = 2;
         }
 
-        this.descr = this.name + ', ' + this.cards[0].value + '\'s';
+        this.descr = this.name + ', ' + this.cards[0].toString().slice(0, -1) + '\'s';
       }
 
       return this.cards.length >= 2;
@@ -1282,7 +1282,7 @@
       }
 
       this.cards = this.cards.sort(Card.sort);
-      this.descr = this.cards[0].wildValue + ' High';
+      this.descr = this.cards[0].toString().slice(0, -1) + ' High';
 
       return true;
     }
