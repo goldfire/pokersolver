@@ -18,7 +18,7 @@ npm install pokersolver
 ## Examples
 #### Server Usage
 ```javascript
-var Hand = require('pokersolve').Hand;
+var Hand = require('pokersolver').Hand;
 ```
 
 #### Browser Usage
