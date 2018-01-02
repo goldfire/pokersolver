@@ -48,7 +48,7 @@ console.log(hand.descr); // Two Pair, A's & Q's
 ### Hand Methods
 #### solve(cards, game, canDisqualify)
 Solves the hand passed in, whether 3 cards or 7. Returns various information such as name, description, score and cards involved.
-* **cards**: `Array` All cards involved in the hand, example: `['Ad', '2d', '3d', '4d', 'Qc', 'Ks', '7h']`.
+* **cards**: `Array` All cards involved in the hand, example: `['Ad', '2d', '3d', '4d', 'Qc', 'Ks', '7h']`. Note that a `10` should be passed as a `T` (`Th` for example).
 * **game**: `String` Which rule set is used, based on the game being played. Default: 'standard'
 * **canDisqualify**: `Boolean` Is this hand subject to qualification rules, which some games have? Default: false
 
