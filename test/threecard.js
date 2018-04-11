@@ -99,7 +99,7 @@ describe('One Pair', function() {
   });
 });
 
-describe('Deterining winning hands', function() {
+describe('Determining winning hands', function() {
   it('should detect the winning hand from a list', function() {
     var h1 = Hand.solve(['2s', '3s', '3h'], gameForTest, false);
     var h2 = Hand.solve(['3h', 'Ac', '2s'], gameForTest, true);

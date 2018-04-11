@@ -177,7 +177,7 @@ describe('Building hands from 5 cards', function() {
   });
 });
 
-describe('Deterining winning hands', function() {
+describe('Determining winning hands', function() {
   it('should detect the winning hand from a list', function() {
     var h1 = Hand.solve(['2s', '3s', '4h', '5c', 'As', 'Ts', '8d']);
     var h2 = Hand.solve(['5s', 'Td', '3h', 'Ac', '2s', 'Ts', '8d']);
