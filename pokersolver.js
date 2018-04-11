@@ -56,6 +56,11 @@
       if (canDisqualify && this.game.lowestQualified) {
         this.alwaysQualifies = false;
       }
+
+      // Ensure no duplicate cards in standard game.
+      if (game.descr === 'standard' && new Set(cards).size !== cards.length) {
+        throw new Error('Duplicate cards');
+      }
       
       // Get rank based on game.
       var handRank = this.game.handValues.length;
