@@ -29,9 +29,13 @@ describe('A Straight Flush', function() {
     var hand = new StraightFlush(['Qd', '7s', '8s', 'Js', 'Kh', 'Ts', '9s'], gameForTest);
     return hand.isPossible.should.equal(true);
   });
-  return it('should be detected as not possible', function() {
+  it('should be detected as not possible', function() {
     var hand = new StraightFlush(['Qd', '7s', '8s', 'Js', 'Kh', 'Ts', '9d'], gameForTest);
     return hand.isPossible.should.equal(false);
+  });
+  return it('should return 5 cards with low ace', function() {
+    var hand = new StraightFlush(['Ad', '2d', '3d', '4d', '5d', 'Ts', '9d'], gameForTest);
+    return hand.cards.length.should.equal(5);
   });
 });
 

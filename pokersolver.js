@@ -373,10 +373,12 @@
       }
 
       if (possibleStraight) {
-        for (var suit in this.suits) {
-          if (possibleStraight[0].suit !== suit) {
-            nonCards = nonCards.concat(this.suits[suit] || []);
-            nonCards = Hand.stripWilds(nonCards, this.game)[1];
+        if (this.game.descr !== 'standard') {
+          for (var suit in this.suits) {
+            if (possibleStraight[0].suit !== suit) {
+              nonCards = nonCards.concat(this.suits[suit] || []);
+              nonCards = Hand.stripWilds(nonCards, this.game)[1];
+            }
           }
         }
         var straight = new Straight(possibleStraight, this.game);
