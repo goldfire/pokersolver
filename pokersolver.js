@@ -9,6 +9,21 @@
 
   // NOTE: The 'joker' will be denoted with a value of 'O' and any suit.
   var values = ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A'];
+  const LO_VALUE_MAP = {
+    2: 2,
+    3: 3,
+    4: 4,
+    5: 5,
+    6: 6,
+    7: 7,
+    8: 8,
+    9: 9,
+    T: 10,
+    J: 11,
+    Q: 12,
+    K: 13,
+    A: 1,
+  };
 
   /**
    * Base Card class that defines a single card.
@@ -280,32 +295,54 @@
      * @param  {Array} hands Hands to evaluate.
      * @return {Array}       Winning hands.
      */
-    static winners(hands) {
-      hands = hands.filter(function(h) {
-        return h.qualifiesHigh();
-      });
+    static winners(hands, lo) {
+      if (!lo) {
+        hands = hands.filter(function(h) {
+          return h.qualifiesHigh();
+        });
 
-      var highestRank = Math.max.apply(Math, hands.map(function(h) {
-        return h.rank;
-      }));
+        var highestRank = Math.max.apply(Math, hands.map(function(h) {
+          return h.rank;
+        }));
 
-      hands = hands.filter(function(h) {
-        return h.rank === highestRank;
-      });
+        hands = hands.filter(function(h) {
+          return h.rank === highestRank;
+        });
 
-      hands = hands.filter(function(h) {
-        var lose = false;
-        for (var i=0; i<hands.length; i++) {
-          lose = h.loseTo(hands[i]);
-          if (lose) {
-            break;
+        hands = hands.filter(function(h) {
+          var lose = false;
+          for (var i=0; i<hands.length; i++) {
+            lose = h.loseTo(hands[i]);
+            if (lose) {
+              break;
+            }
+          }
+
+          return !lose;
+        });
+
+        return hands;
+      } else { //lo hand
+        const handsInString = hands.map(h => h.toString().split(', ').map(c => LO_VALUE_MAP[c[0]]).sort((a, b) => b - a));
+        handsInString.forEach(hand => {
+          if(hand.filter((value, index, self) => {
+            return self.indexOf(value) === index;
+          }).length < 5) {
+            throw new Error('Unqulified lo hand');
+          };
+        });
+        const los = handsInString.map(h => parseInt(h.join('')));
+        var min = Math.min(...los);
+        console.log('lows', los, min);
+        let output = [];
+        for (var i = 0; i < hands.length; i++) {
+          if (los[i] === min) {
+            output.push(hands[i]);
           }
         }
 
-        return !lose;
-      });
-
-      return hands;
+        return output;
+      }
     }
 
     /**

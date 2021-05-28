@@ -52,8 +52,8 @@ Solves the hand passed in, whether 3 cards or 7. Returns various information suc
 * **game**: `String` Which rule set is used, based on the game being played. Default: 'standard'
 * **canDisqualify**: `Boolean` Is this hand subject to qualification rules, which some games have? Default: false
 
-#### winners(hands)
-Compare the passed hands and determine which is the best hand(s). Can return multiple if there is a tie.
+#### winners(hands, lo = true)
+Compare the passed hands and determine which is the best hand(s). `lo = true` would compare the lowest lo hand. Can return multiple if there is a tie.
 * **hands** `Array` All hands solved with `Hand.solve` that should be compared.
 
 #### toString()
