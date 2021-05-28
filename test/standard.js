@@ -190,7 +190,7 @@ describe('Determining winning hands', function() {
     winners.length.should.equal(1);
     return winners[0].should.equal(h3);
   });
-  return it('should detect the winning hands from a list', function() {
+  ('should detect the winning hands from a list', function() {
     var h1 = Hand.solve(['2s', '3s', '4h', '5c', 'As', 'Ts', '8d']);
     var h2 = Hand.solve(['2h', '3h', '4d', '5d', 'Ah', 'Tc', '8c']);
     var h3 = Hand.solve(['5s', 'Ts', '3h', 'Ac', '2s', 'Tc', '8d']);
@@ -198,5 +198,14 @@ describe('Determining winning hands', function() {
     winners.length.should.equal(2);
     (winners.indexOf(h1) >= 0).should.equal(true);
     return (winners.indexOf(h2) >= 0).should.equal(true);
+  });
+
+  return it.only('should detect the winning hands from a list if lo hand', function() {
+    var h1 = Hand.solve(['2s', '3s', '4h', '6c', 'As']);
+    var h2 = Hand.solve(['2h', '3h', '4d', '5d', '8c']);
+    var h3 = Hand.solve(['5s', '3h', 'Ac', '2s', '8d']);
+    var winners = Hand.winners([h1, h2, h3], true);
+    winners.length.should.equal(1);
+    return (winners.indexOf(h1) >= 0).should.equal(true);
   });
 });
