@@ -333,7 +333,6 @@
         });
         const los = handsInString.map(h => parseInt(h.join('')));
         var min = Math.min(...los);
-        console.log('lows', los, min);
         let output = [];
         for (var i = 0; i < hands.length; i++) {
           if (los[i] === min) {
