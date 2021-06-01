@@ -324,13 +324,15 @@
         return hands;
       } else { //lo hand
         const handsInString = hands.map(h => h.toString().split(', ').map(c => LO_VALUE_MAP[c[0]]).sort((a, b) => b - a));
+        //check if duplicated card or bigger than 8
         handsInString.forEach(hand => {
           if(hand.filter((value, index, self) => {
             return self.indexOf(value) === index;
-          }).length < 5) {
+          }).length < 5 || hand.filter(card => card < 9).length < 5) {
             throw new Error('Unqulified lo hand');
           };
         });
+
         const los = handsInString.map(h => parseInt(h.join('')));
         var min = Math.min(...los);
         let output = [];
