@@ -223,9 +223,9 @@ describe('Determining winning hands', function() {
 });
 
 describe('toString low', function() { 
-  it('should return a hand in lo string representation', function() {
-    var h1 = Hand.solve(['2s', '3s', '4h', '6c', 'As']);
-    h1.toString({lo: true}).should.equal('64321');
+  it.only('should return a hand in lo string representation', function() {
+    var h1 = Hand.solve(['Ac', '2c', '7h', '4c', '5s' ]);
+    h1.toString({lo: true}).should.equal('75421');
   })
 
   it('should return a hand in lo string representation with high cards replaced as 9', function() {

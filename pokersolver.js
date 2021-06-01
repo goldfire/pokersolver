@@ -10,6 +10,7 @@
   // NOTE: The 'joker' will be denoted with a value of 'O' and any suit.
   var values = ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A'];
   const LO_VALUE_MAP = {
+    1: 1,
     2: 2,
     3: 3,
     4: 4,
@@ -38,7 +39,7 @@
 
     toString(opts = {lo: false}) {
       if (opts.lo) {
-        return LO_VALUE_MAP[this.wildValue] < 9 ? LO_VALUE_MAP[this.wildValue] : '9';
+        return LO_VALUE_MAP[this.value] < 9 ? LO_VALUE_MAP[this.value] : '9';
       }
       return this.wildValue.replace('T', '10') + this.suit;
     }
