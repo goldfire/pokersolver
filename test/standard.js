@@ -200,7 +200,19 @@ describe('Determining winning hands', function() {
     return (winners.indexOf(h2) >= 0).should.equal(true);
   });
 
-  return it.only('should detect the winning hands from a list if lo hand', function() {
+  it('should detect unqualified lo hand with duplicated cards', function() {
+    var h1 = Hand.solve(['2s', '2c', '4h', '6c', 'As']);
+    var h2 = Hand.solve(['2h', '3h', '4d', '5d', '8c']);
+    return (function () {Hand.winners([h1, h2], true)}).should.throw();
+  });
+
+  it('should detect unqualified lo hand with less than 5 cards no larger than 8', function() {
+    var h1 = Hand.solve(['2s', '2c', '4h', '6c', 'Ts']);
+    var h2 = Hand.solve(['2h', '3h', '4d', '5d', '8c']);
+    return (function () {Hand.winners([h1, h2], true)}).should.throw();
+  });
+
+  return it('should detect the winning hands from a list if lo hand', function() {
     var h1 = Hand.solve(['2s', '3s', '4h', '6c', 'As']);
     var h2 = Hand.solve(['2h', '3h', '4d', '5d', '8c']);
     var h3 = Hand.solve(['5s', '3h', 'Ac', '2s', '8d']);
