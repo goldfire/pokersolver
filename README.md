@@ -56,8 +56,9 @@ Solves the hand passed in, whether 3 cards or 7. Returns various information suc
 Compare the passed hands and determine which is the best hand(s). `lo = true` would compare the lowest lo hand. Can return multiple if there is a tie.
 * **hands** `Array` All hands solved with `Hand.solve` that should be compared.
 
-#### toString()
+#### toString(opts = {lo: false})
 Returns a formatted string of all cards involved in the identified hand type (maximum of 5 cards).
+* **opts**: Options to return a lo hand string which cards higher than 8 will be replaced by 9
 
 ### Solved Hand Properties
 #### cardPool `Array`

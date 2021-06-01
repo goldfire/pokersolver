@@ -221,3 +221,20 @@ describe('Determining winning hands', function() {
     return (winners.indexOf(h1) >= 0).should.equal(true);
   });
 });
+
+describe('toString low', function() { 
+  it('should return a hand in lo string representation', function() {
+    var h1 = Hand.solve(['2s', '3s', '4h', '6c', 'As']);
+    h1.toString({lo: true}).should.equal('64321');
+  })
+
+  it('should return a hand in lo string representation with high cards replaced as 9', function() {
+    var h1 = Hand.solve(['2s', 'Ts', '4h', '6c', 'As']);
+    h1.toString({lo: true}).should.equal('96421');
+  })
+
+  it('should return a hand in hi string representation', function() {
+    var h1 = Hand.solve(['2s', '3s', '4h', '6c', 'As']);
+    h1.toString().should.equal('As, 6c, 4h, 3s, 2s');
+  })
+});

@@ -36,7 +36,10 @@
       this.wildValue = str.substr(0, 1);
     }
 
-    toString() {
+    toString(opts = {lo: false}) {
+      if (opts.lo) {
+        return LO_VALUE_MAP[this.wildValue] < 9 ? LO_VALUE_MAP[this.wildValue] : '9';
+      }
       return this.wildValue.replace('T', '10') + this.suit;
     }
 
@@ -258,9 +261,12 @@
      * Return list of contained cards in human readable format.
      * @return {String}
      */
-    toString() {
+    toString(opts = {lo: false}) {
+      if (opts.lo) {
+        return this.cards.sort((a, b) => LO_VALUE_MAP[b.wildValue] - LO_VALUE_MAP[a.wildValue]).map(c => c.toString(opts)).join('');
+      }
       var cards = this.cards.map(function(c) {
-        return c.toString();
+        return c.toString(opts);
       });
 
       return cards.join(', ');
