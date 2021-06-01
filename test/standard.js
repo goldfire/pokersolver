@@ -223,7 +223,7 @@ describe('Determining winning hands', function() {
 });
 
 describe('toString low', function() { 
-  it.only('should return a hand in lo string representation', function() {
+  it('should return a hand in lo string representation', function() {
     var h1 = Hand.solve(['Ac', '2c', '7h', '4c', '5s' ]);
     h1.toString({lo: true}).should.equal('75421');
   })

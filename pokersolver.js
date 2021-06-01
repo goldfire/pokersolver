@@ -78,7 +78,7 @@
 
       // Ensure no duplicate cards in standard game.
       if (game.descr === 'standard' && new Set(cards).size !== cards.length) {
-        throw new Error('Duplicate cards');
+        throw new Error(`Duplicate cards: ${cards}`);
       }
       
       // Get rank based on game.
