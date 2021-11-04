@@ -1847,11 +1847,12 @@
     global.OnePair = OnePair;
     global.HighCard = HighCard;
     global.PaiGowPokerHelper = PaiGowPokerHelper;
+    return global;
   }
 
   // Export the classes for node.js use.
   if (typeof exports !== 'undefined') {
-    exportToGlobal(exports);
+    module.exports = exportToGlobal(exports);
   }
 
   // Add the classes to the window for browser use.
