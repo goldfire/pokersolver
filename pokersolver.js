@@ -4,6 +4,8 @@
  * http://goldfirestudios.com
  */
 
+var percom = require('percom');
+
 (function() {
   'use strict';
 
@@ -1824,10 +1826,52 @@
     }
   }
 
+  class OmahaGame {
+    /**
+     * Build and return the best hand for Omaha Hold'em.
+     * @param  {Array} boardCards Array of board cards (['Ad', '3c', 'Th', ...]).
+     * @param  {Array} playerCards Array of player's cards (['Ad', '3c', 'Th', ...]).
+     * @return {Hand}       Best hand.
+     */
+    static solve(boardCards, playerCards) {
+      const game = new Game('standard');
+
+      var boardCombinations = percom.com(boardCards, 3);
+      var playerCombinations = percom.com(playerCards, 2);
+      var allCombinations = boardCombinations.reduce(function (res, b) {
+        return res.concat(
+          playerCombinations.map(function (p) {
+            return b.concat(...p);
+          })
+        );
+      }, []);
+
+      var hands = game.handValues;
+      var result = null;
+
+      for (var j = 0; j < allCombinations.length; j++) {
+        var combinationResult = null;
+        var cards = allCombinations[j];
+        for (var i = 0; i < hands.length; i++) {
+          combinationResult = new hands[i](cards, game);
+          if (combinationResult.isPossible) {
+            break;
+          }
+        }
+        if (!result || result.compare(combinationResult) > 0) {
+          result = combinationResult;
+        }
+      }
+
+      return result;
+    }
+  }
+
   function exportToGlobal(global) {
     global.Card = Card;
     global.Hand = Hand;
     global.Game = Game;
+    global.OmahaGame = OmahaGame;
     global.RoyalFlush = RoyalFlush;
     global.NaturalRoyalFlush = NaturalRoyalFlush;
     global.WildRoyalFlush = WildRoyalFlush;
